@@ -1,0 +1,237 @@
+package roster;
+
+import java.util.Calendar;
+import java.util.Scanner;
+
+/**
+ * Date.java
+ * Date class for storing and comparing dates. Contains methods for comparing, printing, parsing dates,
+ * and checking for validity.
+ * @author Alex Virilli, Ryan Elizondo-Fallas
+ */
+public class Date implements Comparable<Date> {
+    private int year;
+    private int month;
+    private int day;
+
+    Calendar c = Calendar.getInstance();
+
+    @Override
+    public String toString(){ //return the date in the format mm/dd/yyyy
+        String  str = "";
+        str = str + this.month + "/";
+        str = str + this.day + "/";
+        str = str + this.year;
+        return str;
+    }
+
+    /**
+     * equals method for comparing dates and determining equality
+     * @param Date the object to be compared.
+     * @return true if the dates are equal, false if they are not
+     */
+    @Override
+    public boolean equals(Object Date){
+        if(this == Date) return true;
+        if(!(Date instanceof Date)) return false;
+        Date D = (Date) Date;
+        if(this.day == D.getDay() && this.month == D.getMonth() && this.year == D.getYear()) return true;
+        return false;
+    }
+
+    /**
+     * compareTo method for comparing dates and determining order
+     * @param Date the object to be compared.
+     * @return 1 if this date is greater than the date being compared, -1 if this date is less than the date being
+     * compared, 0 if they are equal
+     */
+    @Override
+    public int compareTo(Date Date){
+        if(this.year < Date.getYear()) return -1;
+        if(this.year > Date.getYear()) return 1;
+        if(this.month < Date.getMonth()) return -1;
+        if(this.month > Date.getMonth()) return 1;
+        if(this.day < Date.getDay()) return -1;
+        if(this.day > Date.getDay()) return 1;
+        return 0;
+    }
+
+    public Date() { //default constructor
+        this.year = c.get(Calendar.YEAR);
+        this.day = c.get(Calendar.DAY_OF_MONTH);
+        this.month = c.get(Calendar.MONTH) + 1; //since calendar.month goes from 0 (jan) to 11 (dec)
+    }
+
+    /**
+     * constructor that takes a string in the format mm/dd/yyyy
+     * @param date the string to be parsed
+     */
+    public Date(String date) {
+        this.month = Integer.parseInt(date.substring(0,date.indexOf("/")));
+        this.day = Integer.parseInt(date.substring(date.indexOf("/")+1,date.lastIndexOf("/")));
+        this.year =  Integer.parseInt(date.substring(date.lastIndexOf("/")+1));
+    }
+
+    public int getDay(){ //return the day
+        return day;
+    }
+    public int getMonth(){ //return the month
+        return month;
+    }
+    public int getYear(){ //return the year
+        return year;
+    }
+
+    public static final int QUADRENNIAL = 4;
+    public static final int CENTENNIAL = 100;
+    public static final int QUATERCENTENNIAL = 400;
+    public static final int daysInJanuary = 31;
+    public static final int daysInFebruary = 28;
+    public static final int daysInFebruaryLeapYear = 29;
+    public static final int daysInMarch = 31;
+    public static final int daysInApril = 30;
+    public static final int daysInMay = 31;
+    public static final int daysInJune = 30;
+    public static final int daysInJuly = 31;
+    public static final int daysInAugust = 31;
+    public static final int daysInSeptember = 30;
+    public static final int daysInOctober = 31;
+    public static final int daysInNovember = 30;
+    public static final int daysInDecember = 31;
+
+    /**
+     * determines if the year is a leap year
+     * @return true if the year is a leap year, false if it is not
+     */
+    public boolean isLeapYear() { //return true if the year is a leap year
+        if((year % QUADRENNIAL) == 0){
+            if((year % CENTENNIAL)==0){
+                if((year % QUATERCENTENNIAL)==0){
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * determines if the student is 16 years old
+     * @return true if the student is 16 years old, false if they are not
+     */
+    public boolean isSixteen() { //return true if the student is 16 years old
+        int age = c.get(Calendar.YEAR) - this.year;
+        boolean tf;
+        if(this.month > c.get(Calendar.MONTH)+1){
+            age--;
+        }
+        if(this.month == c.get(Calendar.MONTH)+1){
+            if(this.day > c.get(Calendar.DAY_OF_MONTH)){
+                age--;
+            }
+        }
+        return age >= 16;
+
+    }
+
+    /**
+     * determines if the date is valid
+     * @return true if the date is valid, false if it is not
+     */
+    public boolean isValid() { //return true if the date is valid
+        if(month > 12 || month < 1) {
+            return false;
+        } else {
+            switch(month) {
+                case 1:
+                    if(day > daysInJanuary)
+                        return false;
+                    break;
+                case 2:
+                    if(isLeapYear()){
+                        if(day > daysInFebruaryLeapYear)
+                            return false;
+                    } else {
+                        if(day > daysInFebruary)
+                            return false;
+                    }
+                    break;
+                case 3:
+                    if(day > daysInMarch)
+                        return false;
+                    break;
+                case 4:
+                    if(day > daysInApril)
+                        return false;
+                    break;
+                case 5:
+                    if(day > daysInMay)
+                        return false;
+                case 6:
+                    if(day > daysInJune)
+                        return false;
+                    break;
+                case 7:
+                    if(day > daysInJuly)
+                        return false;
+                    break;
+                case 8:
+                    if(day > daysInAugust)
+                        return false;
+                    break;
+                case 9:
+                    if(day > daysInSeptember)
+                        return false;
+                    break;
+                case 10:
+                    if(day > daysInOctober)
+                        return false;
+                    break;
+                case 11:
+                    if(day > daysInNovember)
+                        return false;
+                    break;
+                case 12:
+                    if(day > daysInDecember)
+                        return false;
+                    break;
+            }
+            if(year < c.get(Calendar.YEAR)){
+                return true;
+            } else if (year > c.get(Calendar.YEAR)){
+                return false;
+            } else {
+                if(this.month < (c.get(Calendar.MONTH)+1)){
+                    return true;
+                } else if (this.month > (c.get(Calendar.MONTH)+1)){
+                    return false;
+                } else {
+                    if(this.day <= (c.get(Calendar.DAY_OF_MONTH))) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * main method for testing isValid()
+     * @param args
+     *
+     */
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        while(true){
+            System.out.println("Enter a date in the format mm/dd/yyyy");
+            String date = in.nextLine();
+            if(date.equals("Q")) break;
+            Date d = new Date(date);
+            System.out.println(d.isValid());
+        }
+    }
+}
