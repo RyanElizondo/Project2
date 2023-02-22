@@ -1,0 +1,81 @@
+public class Enrollment {
+    private EnrollStudent[] enrollStudents;
+    private int size;
+
+    public Enrollment(){
+        this.size = 4;
+        this.enrollStudents = new EnrollStudent[size];
+    }
+
+    private void grow(){
+        int tempSize = size;
+        size+=4;
+        EnrollStudent[] tempArr = new EnrollStudent[size];
+        for(int i = 0; i < tempSize; i++){
+            tempArr[i] = enrollStudents[i];
+        }
+        enrollStudents = tempArr;
+    }
+
+    //add to the end of array
+    public void add(EnrollStudent enrollStudent){
+        if(!contains(enrollStudent)) {
+            if (enrollStudents[size - 1] != null) grow();
+            int i = 0;
+            while (enrollStudents[i] != null) {
+                i++;
+            }
+            enrollStudents[i] = enrollStudent;
+        }
+    }
+
+    //search through array to find matching student, return index if found, -1 if not found
+    private int getIndex(EnrollStudent enrollStudent){
+        int index = 0;
+        while(enrollStudents[index]!=null && index < size){
+            if(enrollStudents[index].equals(enrollStudent)) return index;
+            index++;
+        }
+        return -1;
+    }
+
+    private int getLastIndex(){
+        int index = 0;
+        int lastIndex = size-1;
+        if(enrollStudents[lastIndex]!=null) return (lastIndex);
+        while(enrollStudents[index]!=null){
+            index++;
+        }
+        return index;
+    }
+
+    //move the last student in the array to replace the index of the deleted student
+    public void remove(EnrollStudent enrollStudent){
+        int removeIndex = getIndex(enrollStudent);
+        int lastIndex = getLastIndex();
+        enrollStudents[removeIndex] = enrollStudents[lastIndex];
+        enrollStudents[lastIndex] = null;
+    }
+
+    //Returns true if enrollStudent is in the array, false otherwise
+    public boolean contains(EnrollStudent enrollStudent){
+        int NOT_FOUND = -1;
+        return (!(getIndex(enrollStudent) == NOT_FOUND));
+    }
+
+    //print the array as is without sorting
+    public void print(){
+        int index = 0;
+        if (enrollStudents[index] == null) {
+            System.out.println("Enrollment is empty!");
+        } else {
+            System.out.println("** Enrollment **");
+            while(enrollStudents[index]!=null && index < size){
+                System.out.println(enrollStudents[index].toString());
+                index++;
+            }
+            System.out.println("* end of enrollment *");
+        }
+    }
+
+}
