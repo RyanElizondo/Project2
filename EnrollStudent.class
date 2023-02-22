@@ -1,0 +1,41 @@
+public class EnrollStudent {
+    private Profile profile;
+    private int creditsEnrolled;
+
+    //constructors
+    public EnrollStudent(){
+        this.profile = null;
+        this.creditsEnrolled = 0;
+    }
+    public EnrollStudent(Profile profile, int creditsEnrolled){
+        this.profile = profile;
+        this.creditsEnrolled = creditsEnrolled;
+    }
+
+    //getters
+    public int getCreditsEnrolled(){
+        return creditsEnrolled;
+    }
+
+    public Profile getProfile(){
+        return profile;
+    }
+
+    //Return true or false if the enroll student matches
+    @Override
+    public boolean equals(Object enrollStudent){
+        if(this == enrollStudent) return true;
+        if(!(enrollStudent instanceof EnrollStudent)) return false;
+        EnrollStudent e = (EnrollStudent) enrollStudent;
+        return this.profile.equals(e.profile) && this.creditsEnrolled == e.creditsEnrolled;
+    }
+
+    //Convert enroll student to a string
+    @Override
+    public String toString(){
+        return this.profile.toString() + " enrolled " + creditsEnrolled + " credits";
+    }
+
+
+
+}
