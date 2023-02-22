@@ -1,0 +1,33 @@
+public class TriState extends NonResident{
+    private String state;
+
+    public TriState(Profile profile, Major major, int creditCompleted, String state){
+        super(profile, major, creditCompleted);
+        this.state = state;
+    }
+
+    private int getDiscount(){
+        if(state.equalsIgnoreCase("NY")) return 4000;
+        if(state.equalsIgnoreCase("CT")) return 5000;
+        return 0;
+    }
+
+    @Override
+    public double tuitionDue(int creditEnrolled){
+        if(creditEnrolled < FULL_TIME_LOWER_BOUND){
+            return creditEnrolled*COST_PER_CREDIT_HOUR_NON_RESIDENT + UNIVERSITY_FEE_PART_TIME;
+        }
+        if(creditEnrolled > FULL_TIME_UPPER_BOUND){
+            int extraCredits = creditEnrolled - FULL_TIME_UPPER_BOUND;
+            double extraCredits_cost = extraCredits * COST_PER_CREDIT_HOUR_NON_RESIDENT;
+            return extraCredits_cost + UNIVERSITY_FEE_FULL_TIME + TUITION_NON_RESIDENT - getDiscount();
+        }
+        return TUITION_NON_RESIDENT + UNIVERSITY_FEE_FULL_TIME - getDiscount();
+    }
+
+    @Override
+    public boolean isResident(){
+        return false;
+    }
+
+}
