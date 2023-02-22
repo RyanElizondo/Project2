@@ -1,0 +1,32 @@
+public class International extends NonResident{
+
+    private boolean isStudyAbroad;
+    public static final int INTERNATIONAL_MINIMUM_CREDITS = 12;
+    public static final int INTERNATIONAL_STUDY_ABROAD_MAXIMUM = 12;
+    public static final int TUITION_INTERNATIONAL = 29737;
+    public static final int UNIVERSITY_FEE = 3268;
+    public static final int HEALTH_INSURANCE_FEE = 2650;
+
+    public International(Profile profile, Major major, int creditCompleted, boolean isStudyAbroad){
+        super(profile,major,creditCompleted);
+        this.isStudyAbroad = isStudyAbroad;
+    }
+
+    @Override
+    public boolean isValid(int creditEnrolled){
+        if(isStudyAbroad) return creditEnrolled <= 12;
+        return creditEnrolled >= 12;
+    }
+
+    @Override
+    public boolean isResident(){
+        return false;
+    }
+
+    @Override
+    public double tuitionDue(int creditEnrolled){
+        if(isStudyAbroad) return UNIVERSITY_FEE + HEALTH_INSURANCE_FEE;
+        return TUITION_INTERNATIONAL + UNIVERSITY_FEE + HEALTH_INSURANCE_FEE;
+    }
+
+}
