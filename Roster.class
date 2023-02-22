@@ -281,4 +281,18 @@ public class Roster {
         //print sequentially
         printSequential();
     }
+        //Print out student with 120 credits or more
+    public  void printCompleted(){
+        int i = 0;
+        if(roster[i]==null){
+            System.out.println("Student roster is empty!");
+        } else {
+            System.out.println("* Student roster sorted by last name, first name, DOB **");
+            while (i != size && roster[i] != null) {
+                if(roster[i].getCreditCompleted()>=120) System.out.println(roster[i].toString());
+                if (i < size) i++;
+            }
+            System.out.println("* end of roster **");
+        }
+    }
 }
