@@ -1,0 +1,31 @@
+public class NonResident extends Student{
+
+    public static final int FULL_TIME_LOWER_BOUND = 12;
+    public static final int FULL_TIME_UPPER_BOUND = 16;
+    public static final double TUITION_NON_RESIDENT = 29737;
+    public static final double UNIVERSITY_FEE_FULL_TIME = 3268;
+    public static final double UNIVERSITY_FEE_PART_TIME = 3268 * 0.8;
+    public static final double COST_PER_CREDIT_HOUR_NON_RESIDENT = 966;
+
+    public NonResident(Profile profile, Major major, int creditCompleted){
+        super(profile, major, creditCompleted);
+    }
+    @Override
+    public double tuitionDue(int creditsEnrolled){
+        if(creditsEnrolled < FULL_TIME_LOWER_BOUND){
+            return (creditsEnrolled*COST_PER_CREDIT_HOUR_NON_RESIDENT) + UNIVERSITY_FEE_PART_TIME;
+        }
+        if(creditsEnrolled > FULL_TIME_UPPER_BOUND){
+            int extraCredits = creditsEnrolled - FULL_TIME_UPPER_BOUND;
+            double extraCredits_cost = extraCredits * COST_PER_CREDIT_HOUR_NON_RESIDENT;
+            return TUITION_NON_RESIDENT + UNIVERSITY_FEE_FULL_TIME + extraCredits_cost;
+        }
+        return TUITION_NON_RESIDENT + UNIVERSITY_FEE_FULL_TIME;
+    }
+
+    @Override
+    public boolean isResident(){
+        return false;
+    }
+
+}
