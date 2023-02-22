@@ -1,0 +1,40 @@
+public class Resident extends Student{
+    private int scholarship;
+
+    public static final int FULL_TIME_LOWER_BOUND = 12;
+    public static final int FULL_TIME_UPPER_BOUND = 16;
+    public static final double UNIVERSITY_FEE_FULL_TIME = 3268;
+    public static final double UNIVERSITY_FEE_PART_TIME = 3268 * 0.8;
+    public static final double COST_PER_CREDIT_HOUR = 404;
+    public static final double TUITION = 12536;
+
+
+    public Resident(Profile profile, Major major, int creditCompleted, int scholarship){
+        super(profile, major, creditCompleted);
+        this.scholarship = scholarship;
+    }
+
+    public void setScholarship(int scholarship){
+        this.scholarship = scholarship;
+    }
+
+    @Override
+    public double tuitionDue(int creditsEnrolled){
+        if(creditsEnrolled < FULL_TIME_LOWER_BOUND){
+            return creditsEnrolled * COST_PER_CREDIT_HOUR + UNIVERSITY_FEE_PART_TIME - scholarship;
+        }
+        if(creditsEnrolled > FULL_TIME_UPPER_BOUND){
+            int extraCredits = creditsEnrolled - FULL_TIME_UPPER_BOUND;
+            double extraCredits_cost = extraCredits * COST_PER_CREDIT_HOUR;
+            return TUITION + UNIVERSITY_FEE_FULL_TIME + extraCredits_cost - scholarship;
+        }
+        return TUITION + UNIVERSITY_FEE_FULL_TIME - scholarship;
+
+    }
+
+    @Override
+    public boolean isResident(){
+        return true;
+    }
+
+}
