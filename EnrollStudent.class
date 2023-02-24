@@ -7,6 +7,12 @@ public class EnrollStudent {
         this.profile = null;
         this.creditsEnrolled = 0;
     }
+    
+    /**
+     * Create an enrolled student with the given profile and credits enrolled
+     * @param profile
+     * @param creditsEnrolled
+     */
     public EnrollStudent(Profile profile, int creditsEnrolled){
         this.profile = profile;
         this.creditsEnrolled = creditsEnrolled;
@@ -21,7 +27,11 @@ public class EnrollStudent {
         return profile;
     }
 
-    //Return true or false if the enroll student matches
+    /**
+     * Compare two enroll students
+     * @param enrollStudent
+     * @return true if the enrolled students are equal, false otherwise
+     */
     @Override
     public boolean equals(Object enrollStudent){
         if(this == enrollStudent) return true;
@@ -30,7 +40,9 @@ public class EnrollStudent {
         return this.profile.equals(e.profile) && this.creditsEnrolled == e.creditsEnrolled;
     }
 
-    //Convert enroll student to a string
+    /**
+     * Return a string representation of the enrolled student
+     */
     @Override
     public String toString(){
         return this.profile.toString() + " enrolled " + creditsEnrolled + " credits";
