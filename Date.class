@@ -15,7 +15,11 @@ public class Date implements Comparable<Date> {
     private int day;
 
     Calendar c = Calendar.getInstance();
-
+    
+    /**
+     * toString method for printing dates
+     * @return String of the date in the format mm/dd/yyyy
+     */
     @Override
     public String toString(){
         String  str = "";
@@ -24,6 +28,12 @@ public class Date implements Comparable<Date> {
         str = str + this.year;
         return str;
     }
+    
+    /**
+     * equals method for comparing dates
+     * @param Date
+     * @return true if the dates are equal, false if not
+     */
     @Override
     public boolean equals(Object Date){
        if(this == Date) return true;
@@ -32,7 +42,12 @@ public class Date implements Comparable<Date> {
        if(this.day == D.getDay() && this.month == D.getMonth() && this.year == D.getYear()) return true;
        return false;
     }
-    //if the instance object is less than the parameter object return -1, if larger return 1, if equal return 0
+    
+    /**
+     * compareTo method for comparing dates
+     * @param Date
+     * @return -1 if the instance object is less than the parameter object, 1 if larger, 0 if equal
+     */
     @Override
     public int compareTo(Date Date){
         if(this.year < Date.getYear()) return -1;
@@ -44,12 +59,19 @@ public class Date implements Comparable<Date> {
         return 0;
     }
 
+    /**
+     * Constructor for Date class
+     */
     public Date() {
         this.year = c.get(Calendar.YEAR);
         this.day = c.get(Calendar.DAY_OF_MONTH);
         this.month = c.get(Calendar.MONTH) + 1; //since calendar.month goes from 0 (jan) to 11 (dec)
     }
 
+    /**
+     * Constructor for Date class
+     * @param date
+     */
     public Date(String date) {
         this.month = Integer.parseInt(date.substring(0,date.indexOf("/")));
         this.day = Integer.parseInt(date.substring(date.indexOf("/")+1,date.lastIndexOf("/")));
@@ -83,7 +105,10 @@ public class Date implements Comparable<Date> {
     public static final int November = 11;
     public static final int December = 12;
 
-
+    /**
+     * isLeapYear method for checking if a year is a leap year
+     * @return true if the year is a leap year, false if not
+     */
     public boolean isLeapYear() {
         if((year % QUADRENNIAL) == 0){
             if((year % CENTENNIAL)==0){
@@ -100,6 +125,10 @@ public class Date implements Comparable<Date> {
         }
     }
 
+    /**
+     * isSixteen method for checking if a person is 16 years old or older
+     * @return true if the person is 16 years old or older, false if not
+     */
     public boolean isSixteen() {
         int age = c.get(Calendar.YEAR) - this.year;
         boolean tf;
@@ -115,6 +144,10 @@ public class Date implements Comparable<Date> {
 
     }
 
+    /**
+     * daysValidForMonth method for checking if the day is valid for the month
+     * @return true if the day is valid for the month, false if not
+     */
     private boolean daysValidForMonth(){
 
         if(day < 1 || day > 31) return false;
@@ -136,6 +169,10 @@ public class Date implements Comparable<Date> {
         return true;
     }
 
+    /**
+     * isValid method for checking if the date is valid
+     * @return true if the date is valid, false if not
+     */
     public boolean isValid() {
         if(month > 12 || month < 1) {
             return false;
