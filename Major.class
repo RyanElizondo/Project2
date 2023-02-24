@@ -14,7 +14,11 @@ public enum Major {
     private final String majorCode;
     private final String school;
 
-    //constructor for majors
+    /**
+     * This constructor creates a major object
+     * @param majorCode
+     * @param school
+     */
     private Major(String majorCode, String school){
         this.majorCode = majorCode;
         this.school = school;
@@ -28,6 +32,10 @@ public enum Major {
         return school;
     }
 
+    /**
+     * This method returns the name of the major
+     * @return the name of the major
+     */
     public String getName(){
         if(this.majorCode.equals("01:198")) return "CS";
         if(this.majorCode.equals("01:640")) return "MATH";
@@ -36,7 +44,12 @@ public enum Major {
         if(this.majorCode.equals("33:136")) return "BAIT";
         return null;
     }
-
+    
+    /**
+     * This method returns the index of the major in the enum
+     * @param major
+     * @return the index of the major in the enum
+     */
     public int getMajorIndex(String major){
         if(major.equalsIgnoreCase("CS")) return 0;
         if(major.equalsIgnoreCase("MATH")) return 1;
