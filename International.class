@@ -40,7 +40,7 @@ public class International extends NonResident{
     }
 
     /**
-     * tuitionDue calculates the tuition due for international student
+     * tuitionDue calculates the tuition due for international student, using the given credits enrolled, and tuition, and study abroad status
      * @param creditEnrolled
      * @return the tuition due for international student
      */
