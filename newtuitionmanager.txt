@@ -173,12 +173,10 @@ public class TuitionManager {
             return false;
         }
     }
-
-
-
-
+    
     Scanner sc = new Scanner(System.in);
     Roster roster = new Roster();
+    Enrollment enrollment = new Enrollment();
     Major[] majors = Major.values();
 
     void run() {
@@ -194,6 +192,18 @@ public class TuitionManager {
                     addTriState(line);
                 } else if(line[0].equals("AI")) { //add a new international student to the roster
                     addInternational(line);
+                } else if(line[0].equals("S")) { //award student a scholarship
+
+                } else if(line[0].equals("E")) { //enroll a student
+                    
+                } else if(line[0].equals("D")) { //drop a student from enrollment list
+
+                } else if(line[0].equals("PE")) { //display current enrollment list
+
+                } else if(line[0].equals("PT")) { //display tuition due based on credits enrolled with correct format
+
+                } else if(line[0].equals("SE")) { //semester end
+                
                 } else if (line[0].equals("R")) { //remove a student
                     removeStudent(line);
                 } else if (line[0].equals("P")) { /*display roster sorted by last name, first name, and DOB*/
