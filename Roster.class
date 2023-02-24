@@ -281,7 +281,10 @@ public class Roster {
         //print sequentially
         printSequential();
     }
-        //Print out student with 120 credits or more
+    
+    /**
+     * printCompleted method for printing the roster of students who have completed 120 credits or more
+     */
     public  void printCompleted(){
         int i = 0;
         if(roster[i]==null){
