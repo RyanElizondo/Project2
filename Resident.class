@@ -8,7 +8,13 @@ public class Resident extends Student{
     public static final double COST_PER_CREDIT_HOUR = 404;
     public static final double TUITION = 12536;
 
-
+    /**
+     * Create a resident student with the given profile, major, credit completed, and scholarship
+     * @param profile
+     * @param major
+     * @param creditCompleted
+     * @param scholarship
+     */
     public Resident(Profile profile, Major major, int creditCompleted, int scholarship){
         super(profile, major, creditCompleted);
         this.scholarship = scholarship;
@@ -18,6 +24,11 @@ public class Resident extends Student{
         this.scholarship = scholarship;
     }
 
+     /**
+     * tuitionDue calculates the tuition due for resident student
+     * @param creditsEnrolled
+     * @return the tuition due for resident student
+     */
     @Override
     public double tuitionDue(int creditsEnrolled){
         if(creditsEnrolled < FULL_TIME_LOWER_BOUND){
@@ -32,6 +43,10 @@ public class Resident extends Student{
 
     }
 
+    /**
+     * isResident checks if the student is a resident
+     * @return true
+     */
     @Override
     public boolean isResident(){
         return true;
