@@ -25,6 +25,7 @@ public class Enrollment {
      * @param enrollStudent
      */
     public void add(EnrollStudent enrollStudent){
+        if(contains(enrollStudent)) return;
         if(!contains(enrollStudent)) {
             if (enrollStudents[size - 1] != null) grow();
             int i = 0;
@@ -69,6 +70,7 @@ public class Enrollment {
      * @param enrollStudent
      */
     public void remove(EnrollStudent enrollStudent){
+        if(!contains(enrollStudent)) return;
         int removeIndex = getIndex(enrollStudent);
         int lastIndex = getLastIndex();
         enrollStudents[removeIndex] = enrollStudents[lastIndex];
