@@ -184,18 +184,16 @@ public class TuitionManager {
     void run() {
         System.out.println("Roster Manager is running...");
         while (true) {
-            String command = sc.nextLine();
-            String[] line = command.split("\\s+");
-            if (line.length == 0) continue;
-            else if (line[0].trim().length() == 0) continue;
+            String command = sc.nextLine(); String[] line = command.split("\\s+");
+            if (line.length == 0) continue; else if (line[0].trim().length() == 0) continue;
             if (line[0].equals("AR")) { //add a new resident student to the roster
-
+                    addResident(line);
                 } else if(line[0].equals("AN")) { //add a new nonresident student to the roster
-
+                    addNonResident(line);
                 } else if(line[0].equals("AT")) { //add a new tristate student to the roster
-
+                    addTriState(line);
                 } else if(line[0].equals("AI")) { //add a new international student to the roster
-
+                    addInternational(line);
                 } else if (line[0].equals("R")) { //remove a student
                     removeStudent(line);
                 } else if (line[0].equals("P")) { /*display roster sorted by last name, first name, and DOB*/
