@@ -7,22 +7,43 @@ public class International extends NonResident{
     public static final int UNIVERSITY_FEE = 3268;
     public static final int HEALTH_INSURANCE_FEE = 2650;
 
+    /**
+     * Create an international student with the given profile, major, credit completed, and study abroad status
+     * @param profile
+     * @param major
+     * @param creditCompleted
+     * @param isStudyAbroad
+     */
     public International(Profile profile, Major major, int creditCompleted, boolean isStudyAbroad){
         super(profile,major,creditCompleted);
         this.isStudyAbroad = isStudyAbroad;
     }
 
+    /**
+     * isValid checks if the credit enrolled is valid for international student
+     * @param creditEnrolled
+     * @return true if the credit enrolled is valid for international student
+     */
     @Override
     public boolean isValid(int creditEnrolled){
         if(isStudyAbroad) return creditEnrolled <= 12;
         return creditEnrolled >= 12;
     }
-
+    
+    /**
+     * isResident checks if the student is a resident
+     * @return false
+     */
     @Override
     public boolean isResident(){
         return false;
     }
 
+    /**
+     * tuitionDue calculates the tuition due for international student
+     * @param creditEnrolled
+     * @return the tuition due for international student
+     */
     @Override
     public double tuitionDue(int creditEnrolled){
         if(isStudyAbroad) return UNIVERSITY_FEE + HEALTH_INSURANCE_FEE;
