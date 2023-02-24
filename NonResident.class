@@ -18,7 +18,7 @@ public class NonResident extends Student{
     }
     
     /**
-     * tutitionDue calculates the tuition due for non-resident student
+     * tuitionDue calculates the tuition due for non-resident student, using the given credits enrolled, and tuition
      * @param creditsEnrolled
      * @return the tuition due for non-resident student
      */
