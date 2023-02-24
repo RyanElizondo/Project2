@@ -25,7 +25,7 @@ public class Resident extends Student{
     }
 
      /**
-     * tuitionDue calculates the tuition due for resident student
+     * tuitionDue calculates the tuition due for resident student using the given credits enrolled, scholarship, and tuition
      * @param creditsEnrolled
      * @return the tuition due for resident student
      */
