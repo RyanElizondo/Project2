@@ -174,6 +174,39 @@ public class TuitionManager {
         }
     }
 
+    private boolean giveScholarship(String line[]){
+        Date date = new Date(line[3]);
+        Profile profile = new Profile(line[2],line[1],date);
+        NonResident finder = new NonResident(profile, Major.CS, 20);
+        if(!roster.contains(finder)){
+            System.out.println(profile.toString() + " is not in the roster.");
+            return false;
+        }
+        Student student = roster.getStudent(finder);
+        if((!(student instanceof Resident))){
+            System.out.println(profile.toString() + " is not eligible for a schlarship.");
+            return false;
+        }
+        int scholarship = Integer.parseInt(line[4]);
+        ((Resident) student).setScholarship(scholarship);
+        System.out.println(profile.toString() + " awarded $" + scholarship);
+        return true;
+    }
+
+    private boolean enroll(String line[]){
+        EnrollStudent enrollStudent = new EnrollStudent(new Profile(line[2], line[1], new Date(line[3])),Integer.parseInt(line[4]));
+        enrollment.add(enrollStudent);
+        System.out.println(enrollStudent.toString() + " enrolled");
+        return true;
+    }
+
+    private boolean drop(String line[]){
+        EnrollStudent enrollStudent = new EnrollStudent(new Profile(line[2], line[1], new Date(line[3])),Integer.parseInt(line[4]));
+        enrollment.remove(enrollStudent);
+        System.out.println(enrollStudent.toString() + " dropped from enrollment");
+        return true;
+    }
+
     Scanner sc = new Scanner(System.in);
     Roster roster = new Roster();
     Enrollment enrollment = new Enrollment();
@@ -189,12 +222,9 @@ public class TuitionManager {
             } else if(line[0].equals("AN")) { /*add a new nonresident student to the roster*/addNonResident(line);
             } else if(line[0].equals("AT")) { /*add a new tristate student to the roster*/addTriState(line);
             } else if(line[0].equals("AI")) { /*add a new international student to the roster*/addInternational(line);
-            } else if(line[0].equals("S")) { //award student a scholarship
-
-            } else if(line[0].equals("E")) { //enroll a student
-               enrollStudent = new EnrollStudent(new Profile(line[2], line[1], new Date(line[3])),Integer.parseInt(line[4])); enrollment.add(enrollStudent);
-            } else if(line[0].equals("D")) { //drop a student from enrollment list
-                enrollStudent = new EnrollStudent(new Profile(line[2], line[1], new Date(line[3])),Integer.parseInt(line[4])); enrollment.remove(enrollStudent);
+            } else if(line[0].equals("S")) { /*award student a scholarship*/ giveScholarship(line);
+            } else if(line[0].equals("E")) { /*enroll a student*/ enroll(line);
+            } else if(line[0].equals("D")) { /*drop a student from enrollment list*/ drop(line);
             } else if(line[0].equals("PE")) { /*display current enrollment list*/enrollment.print();
             } else if(line[0].equals("PT")) { //display tuition due based on credits enrolled with correct format
 
