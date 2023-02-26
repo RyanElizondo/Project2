@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 /**
  * RosterManager is a class that manages a roster of students. It allows the user to add, remove, and print students.
  * It also allows the user to print students by school, major, and standing.
@@ -206,6 +208,11 @@ public class TuitionManager {
         System.out.println(enrollStudent.toString() + " dropped from enrollment");
         return true;
     }
+    
+    private boolean externalFile(String line[]) throws FileNotFoundException {
+        Scanner externalFile = new Scanner(new File(line[1]));
+        return true;
+    }
 
     Scanner sc = new Scanner(System.in);
     Roster roster = new Roster();
@@ -235,6 +242,7 @@ public class TuitionManager {
             } else if (line[0].equals("PC")) { /*display roster sorted by school and major*/roster.printBySchoolMajor();
             } else if (line[0].equals("L")) { /*list student in a specified school*/roster.printSchool(line[1]);
             } else if (line[0].equals("C")) { /*change a students major */ changeStudentMajor(line,roster,majors);
+            } else if (line[0].equals("LS")) { /*load an external file*/ externalFile(line);
             } else if (line[0].equals("Q")) { /*terminate run*/System.out.println("Tuition Manager terminated."); break;
             } else { System.out.println(line[0] + " is an invalid command!");
             }
