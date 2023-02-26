@@ -7,7 +7,7 @@ public class EnrollStudent {
         this.profile = null;
         this.creditsEnrolled = 0;
     }
-    
+
     /**
      * Create an enrolled student with the given profile and credits enrolled
      * @param profile
@@ -15,6 +15,11 @@ public class EnrollStudent {
      */
     public EnrollStudent(Profile profile, int creditsEnrolled){
         this.profile = profile;
+        this.creditsEnrolled = creditsEnrolled;
+    }
+
+    //setter
+    public void setCreditsEnrolled(int creditsEnrolled){
         this.creditsEnrolled = creditsEnrolled;
     }
 
@@ -37,7 +42,7 @@ public class EnrollStudent {
         if(this == enrollStudent) return true;
         if(!(enrollStudent instanceof EnrollStudent)) return false;
         EnrollStudent e = (EnrollStudent) enrollStudent;
-        return this.profile.equals(e.profile) && this.creditsEnrolled == e.creditsEnrolled;
+        return this.profile.equals(e.profile);
     }
 
     /**
