@@ -103,5 +103,19 @@ public class Enrollment {
             System.out.println("* end of enrollment *");
         }
     }
+    
+        public void printTuitionDue(){
+        int index = 0;
+        if (enrollStudents[index] == null) {
+            System.out.println("Enrollment is empty!");
+        } else {
+            System.out.println("** Tuition Due **");
+            while(enrollStudents[index]!=null && index < size){
+                System.out.println(enrollStudents[index].toString() + enrollStudents[index].getCreditsEnrolled() + " credits, tuition due: $" + String.format("%.2f",enrollStudents[index].getCreditsEnrolled()));
+                index++;
+            }
+            System.out.println("* end of tuition due *");
+        }
+    }
 
 }
