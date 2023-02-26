@@ -197,7 +197,12 @@ public class TuitionManager {
 
     private boolean enroll(String line[]){
         EnrollStudent enrollStudent = new EnrollStudent(new Profile(line[2], line[1], new Date(line[3])),Integer.parseInt(line[4]));
-        enrollment.add(enrollStudent);
+        if(enrollment.contains(enrollStudent)){
+            EnrollStudent pointer = enrollment.getEnrollStudent(enrollStudent);
+            pointer.setCreditsEnrolled(Integer.parseInt(line[4]));
+        } else {
+            enrollment.add(enrollStudent);
+        }
         System.out.println(enrollStudent.toString() + " enrolled");
         return true;
     }
@@ -208,11 +213,11 @@ public class TuitionManager {
         System.out.println(enrollStudent.toString() + " dropped from enrollment");
         return true;
     }
-    
-    private boolean externalFile(String line[]) throws FileNotFoundException {
-        Scanner externalFile = new Scanner(new File(line[1]));
-        return true;
-    }
+
+//    private boolean externalFile(String line[]) throws FileNotFoundException {
+//        Scanner externalFile = new Scanner(new File(line[1]));
+//        return true;
+//    }
 
     Scanner sc = new Scanner(System.in);
     Roster roster = new Roster();
@@ -234,7 +239,7 @@ public class TuitionManager {
             } else if(line[0].equals("D")) { /*drop a student from enrollment list*/ drop(line);
             } else if(line[0].equals("PE")) { /*display current enrollment list*/enrollment.print();
             } else if(line[0].equals("PT")) { //display tuition due based on credits enrolled with correct format
-
+                enrollment.printTuitionDue(roster);
             } else if(line[0].equals("SE")) { /*semester end*/roster.printCompleted();
             } else if (line[0].equals("R")) { /*remove a student*/ removeStudent(line);
             } else if (line[0].equals("P")) { /*display roster sorted by last name, first name, and DOB*/ roster.print();
@@ -242,7 +247,7 @@ public class TuitionManager {
             } else if (line[0].equals("PC")) { /*display roster sorted by school and major*/roster.printBySchoolMajor();
             } else if (line[0].equals("L")) { /*list student in a specified school*/roster.printSchool(line[1]);
             } else if (line[0].equals("C")) { /*change a students major */ changeStudentMajor(line,roster,majors);
-            } else if (line[0].equals("LS")) { /*load an external file*/ externalFile(line);
+            } else if (line[0].equals("LS")) { /*load an external file*/ //externalFile(line);
             } else if (line[0].equals("Q")) { /*terminate run*/System.out.println("Tuition Manager terminated."); break;
             } else { System.out.println(line[0] + " is an invalid command!");
             }
