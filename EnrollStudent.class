@@ -53,6 +53,4 @@ public class EnrollStudent {
         return this.profile.toString() + " enrolled " + creditsEnrolled + " credits";
     }
 
-
-
 }
