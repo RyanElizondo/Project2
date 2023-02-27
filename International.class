@@ -19,6 +19,11 @@ public class International extends NonResident{
         this.isStudyAbroad = isStudyAbroad;
     }
 
+    //getter
+    public boolean getIsStudyAbroad(){
+        return isStudyAbroad;
+    }
+
     /**
      * isValid checks if the credit enrolled is valid for international student
      * @param creditEnrolled
@@ -27,9 +32,9 @@ public class International extends NonResident{
     @Override
     public boolean isValid(int creditEnrolled){
         if(isStudyAbroad) return creditEnrolled <= 12;
-        return creditEnrolled >= 12;
+        return creditEnrolled >= 12 && creditEnrolled <=24;
     }
-    
+
     /**
      * isResident checks if the student is a resident
      * @return false
@@ -49,5 +54,31 @@ public class International extends NonResident{
         if(isStudyAbroad) return UNIVERSITY_FEE + HEALTH_INSURANCE_FEE;
         return TUITION_INTERNATIONAL + UNIVERSITY_FEE + HEALTH_INSURANCE_FEE;
     }
+
+    private String getStudyAbroadString(){
+        if(isStudyAbroad){
+            return "(international: study abroad)";
+        } else {
+            return "(international)";
+        }
+    }
+
+    @Override
+    public String toString(){
+        return this.getProfile().toString() + " (" + this.getMajor().getMajorCode() + " " +
+                getMajor().getName() + " " + getMajor().getSchool() + ") credits completed: " +
+                getCreditCompleted() + " (" + getGrade() + ")(non-resident)" + getStudyAbroadString();
+    }
+
+    @Override
+    public String printType(){
+        if(!isStudyAbroad) {
+            return "(International student)";
+        } else {
+            return "(International student study abroad)";
+        }
+    }
+
+
 
 }
