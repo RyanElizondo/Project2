@@ -191,6 +191,21 @@ public class Roster {
             System.out.println("* end of roster **");
         }
     }
+
+    public void printForStanding(){ //prints roster
+        //print from 0 to size-1
+        int i = 0;
+        if(roster[i]==null){
+            System.out.println("Student roster is empty!");
+        } else {
+            System.out.println("* Student roster sorted by standing **");
+            while (i != size && roster[i] != null) {
+                System.out.println(roster[i].toString());
+                if (i < size) i++;
+            }
+            System.out.println("* end of roster **");
+        }
+    }
     /**
      * printSequential method for printing the roster sequentially
      */
@@ -279,7 +294,7 @@ public class Roster {
             }
         }
         //print sequentially
-        printSequential();
+        printForStanding();
     }
 
     /**
@@ -290,9 +305,9 @@ public class Roster {
         if(roster[i]==null){
             System.out.println("Student roster is empty!");
         } else {
-            System.out.println("* Student roster sorted by last name, first name, DOB **");
+            System.out.println("Credit completed has been updated");
+            System.out.println("** list of students eligible for graduation **");
             while (i != size && roster[i] != null) {
-
                 Profile profile = roster[i].getProfile();
                 EnrollStudent enrollStudent = new EnrollStudent(profile,0);
                 if(enrollment.contains(enrollStudent)){
@@ -301,11 +316,9 @@ public class Roster {
                     currentCredits += student.getCreditsEnrolled();
                     roster[i].setCreditCompleted(currentCredits);
                 }
-
                 if(roster[i].getCreditCompleted()>=120) System.out.println(roster[i].toString());
                 if (i < size) i++;
             }
-            System.out.println("* end of roster **");
         }
     }
 }
