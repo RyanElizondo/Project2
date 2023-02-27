@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,7 +47,7 @@ public class TuitionManager {
     private boolean changeStudentMajor(String line[], Roster roster, Major majors[]){
 
         if(line.length < 5) {
-            System.out.println("Invalid number of arguments");
+            System.out.println("Missing data in line command.");
             return false;
         }
 
@@ -72,7 +73,7 @@ public class TuitionManager {
     private boolean removeStudent(String line[]){
 
         if(line.length < 4) {
-            System.out.println("Invalid number of arguments");
+            System.out.println("Missing data in line command.");
             return false;
         }
 
@@ -90,7 +91,7 @@ public class TuitionManager {
 
     private boolean listSchool(String line[]){
         if(line.length < 2) {
-            System.out.println("Invalid number of arguments");
+            System.out.println("Missing data in line command.");
             return false;
         }
         roster.printSchool(line[1]);
@@ -120,7 +121,7 @@ public class TuitionManager {
     private boolean addResident(String line[]){
 
         if(line.length < 6) {
-            System.out.println("Invalid number of arguments");
+            System.out.println("Missing data in line command.");
             return false;
         }
 
@@ -141,10 +142,32 @@ public class TuitionManager {
         }
     }
 
+    private boolean addResidentNoPrint(String line[]){
+
+        if(line.length < 6) {
+            System.out.println("Missing data in line command.");
+            return false;
+        }
+
+        if(!isValidToAdd(line)) return false;
+
+        Major pointer = Major.CS;
+        int creditComp = Integer.parseInt(line[5]);
+        Date date = new Date(line[3]);
+        Profile profile = new Profile(line[2],line[1],date);
+        Resident resident = makeResident(profile,majors[pointer.getMajorIndex(line[4])],creditComp,0);
+        if(!roster.contains(resident)){
+            roster.add(resident);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private boolean addNonResident(String line[]){
 
         if(line.length < 6) {
-            System.out.println("Invalid number of arguments");
+            System.out.println("Missing data in line command.");
             return false;
         }
 
@@ -165,10 +188,37 @@ public class TuitionManager {
         }
     }
 
+    private boolean addNonResidentNoPrint(String line[]){
+
+        if(line.length < 6) {
+            System.out.println("Missing data in line command.");
+            return false;
+        }
+
+        if(!isValidToAdd(line)) return false;
+
+        Major pointer = Major.CS;
+        int creditComp = Integer.parseInt(line[5]);
+        Date date = new Date(line[3]);
+        Profile profile = new Profile(line[2],line[1],date);
+        NonResident nonResident = makeNonResident(profile,majors[pointer.getMajorIndex(line[4])],creditComp);
+        if(!roster.contains(nonResident)){
+            roster.add(nonResident);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private boolean addTriState(String line[]) {
 
         if(line.length < 7) {
-            System.out.println("Invalid number of arguments");
+            System.out.println("Missing data in line command.");
+            return false;
+        }
+
+        if(!(line[6].equalsIgnoreCase("NY") || line[6].equalsIgnoreCase("CT"))) {
+            System.out.println(line[6] + ": Invalid state code.");
             return false;
         }
 
@@ -190,10 +240,38 @@ public class TuitionManager {
         }
     }
 
+    private boolean addTriStateNoPrint(String line[]) {
+
+        if(line.length < 7) {
+            System.out.println("Missing data in line command.");
+            return false;
+        }
+
+        if(!isValidToAdd(line)) return false;
+
+        if(!(line[6].equalsIgnoreCase("NY") || line[6].equalsIgnoreCase("CT"))) {
+            System.out.println(line[6] + ": Invalid state code.");
+            return false;
+        }
+
+        Major pointer = Major.CS;
+        int creditComp = Integer.parseInt(line[5]);
+        String state = line[6];
+        Date date = new Date(line[3]);
+        Profile profile = new Profile(line[2],line[1],date);
+        TriState triState = makeTriState(profile,majors[pointer.getMajorIndex(line[4])],creditComp,state);
+        if(!roster.contains(triState)) {
+            roster.add(triState);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private boolean addInternational(String line[]){
 
         if(line.length < 6) {
-            System.out.println("Invalid number of arguments");
+            System.out.println("Missing data in line command.");
             return false;
         }
 
@@ -221,13 +299,42 @@ public class TuitionManager {
         }
     }
 
-    private boolean giveScholarship(String line[]){
+    private boolean addInternationalNoPrint(String line[]){
 
-        if(line.length < 5) {
-            System.out.println("Invalid number of arguments");
+        if(line.length < 6) {
+            System.out.println("Missing data in line command.");
             return false;
         }
 
+        if(!isValidToAdd(line)) return false;
+
+        boolean isStudyAbroad = false;
+        if(line.length == 6){
+            isStudyAbroad = false;
+        } else {
+            if(line[6].equalsIgnoreCase("false")) isStudyAbroad = false;
+            if(line[6].equalsIgnoreCase("true")) isStudyAbroad = true;
+        }
+        Major pointer = Major.CS;
+        int creditComp = Integer.parseInt(line[5]);
+        Date date = new Date(line[3]);
+        Profile profile = new Profile(line[2],line[1],date);
+        International international = makeInternational(profile,majors[pointer.getMajorIndex(line[4])],creditComp,isStudyAbroad);
+        if(!roster.contains(international)){
+            roster.add(international);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean giveScholarship(String line[]){
+        if(line.length < 5) { System.out.println("Missing data in line command."); return false; }
+        if(!isInt(line[4])) { System.out.println("Scholarship must be an integer"); return false; }
+        int scholarship = Integer.parseInt(line[4]);
+        if(scholarship > 10000 || scholarship < 1){
+            System.out.println(scholarship + ": invalid amount"); return false;
+        }
         Date date = new Date(line[3]);
         Profile profile = new Profile(line[2],line[1],date);
         NonResident finder = new NonResident(profile, Major.CS, 20);
@@ -236,60 +343,98 @@ public class TuitionManager {
             return false;
         }
         Student student = roster.getStudent(finder);
-        if((!(student instanceof Resident))){
-            System.out.println(profile.toString() + " is not eligible for a schlarship.");
+        EnrollStudent ptr = new EnrollStudent(profile,0);
+        EnrollStudent enrollStudent = enrollment.getEnrollStudent(ptr);
+        if((!(student instanceof Resident)) || enrollStudent.getCreditsEnrolled() < 12){
+            System.out.println(profile.toString() + " " + student.printType() + " is not eligible for the scholarship.");
             return false;
         }
-        int scholarship = Integer.parseInt(line[4]);
         ((Resident) student).setScholarship(scholarship);
-        System.out.println(profile.toString() + " awarded $" + scholarship);
+        System.out.println(profile.toString() + ": scholarship amount updated.");
         return true;
     }
 
     private boolean enroll(String line[]){
-
-        if(line.length < 5) {
-            System.out.println("Invalid number of arguments");
-            return false;
-        }
-
+        if(line.length < 5) { System.out.println("Missing data in line command."); return false; }
+        if(!isInt(line[4])){ System.out.println("Credits enrolled must be an integer"); return false; }
         Profile ptr = new Profile(line[2],line[1], new Date(line[3]));
         Resident test = new Resident(ptr,Major.CS,0,0);
-        if(!roster.contains(test)){
-            System.out.println(ptr.toString() + " not in roster");
-            return false;
-        }
-
+        if(!roster.contains(test)){ System.out.println(ptr.toString() + " not in roster"); return false; }
         EnrollStudent enrollStudent = new EnrollStudent(new Profile(line[2], line[1], new Date(line[3])),Integer.parseInt(line[4]));
+        int creditsEnrolled = Integer.parseInt(line[4]);
+        Student student = roster.getStudent(test);
+        if(student instanceof International){
+            if(!student.isValid(creditsEnrolled)){
+                if(((International) student).getIsStudyAbroad()){
+                    System.out.println("(International student study abroad) " + creditsEnrolled + ": Invalid credit hours "); return false;
+                } else {
+                    System.out.println("(International student) " + creditsEnrolled + ": Invalid credit hours "); return false;
+                }
+            }
+        } else if (student instanceof Resident) {
+            if(!student.isValid(creditsEnrolled)){
+                System.out.println("(Resident) " + creditsEnrolled + ": Invalid credit hours"); return false;
+
+            }
+        } else if (student instanceof TriState) {
+            if(!student.isValid(creditsEnrolled)){
+                System.out.println("(Tri-State) "+ creditsEnrolled + ": Invalid credit hours"); return false;
+            }
+        } else if(student instanceof NonResident){
+            if(!student.isValid(creditsEnrolled)){
+                System.out.println("(Non-Resident) " + creditsEnrolled + ": Invalid credit hours"); return false;
+            }
+        }
         if(enrollment.contains(enrollStudent)){
             EnrollStudent pointer = enrollment.getEnrollStudent(enrollStudent);
             pointer.setCreditsEnrolled(Integer.parseInt(line[4]));
         } else {
             enrollment.add(enrollStudent);
         }
-        System.out.println(enrollStudent.toString() + " enrolled");
+        System.out.println(enrollStudent.toString());
         return true;
     }
 
     private boolean drop(String line[]){
 
         if(line.length < 4) {
-            System.out.println("Invalid number of arguments");
+            System.out.println("Missing data in line command.");
             return false;
         }
-
-        EnrollStudent enrollStudent = new EnrollStudent(new Profile(line[2], line[1], new Date(line[3])),Integer.parseInt(line[4]));
+        Profile profile = new Profile(line[2], line[1], new Date(line[3]));
+        EnrollStudent enrollStudent = new EnrollStudent(profile,0);
+        if(!enrollment.contains(enrollStudent)){
+            System.out.println(profile.toString() + " is not enrolled");
+            return false;
+        }
         enrollment.remove(enrollStudent);
-        System.out.println(enrollStudent.toString() + " dropped from enrollment");
+        System.out.println(profile.toString() + " dropped");
         return true;
     }
 
     private boolean externalFile(String line[]) throws FileNotFoundException {
         try {
             Scanner externalFile = new Scanner(new File(line[1]));
+            String command;
+            String lines[];
+            while(externalFile.hasNextLine()){
+                command = externalFile.nextLine();
+                lines = command.split(",");
+                if(lines[0].equals("R")){
+                    addResidentNoPrint(lines);
+                } else if (lines[0].equals("N")) {
+                    addNonResidentNoPrint(lines);
+                } else if(lines[0].equals("T")) {
+                    addTriStateNoPrint(lines);
+                } else if(lines[0].equals("I")) {
+                    addInternationalNoPrint(lines);
+                }
+            }
+
         } catch(FileNotFoundException ex) {
             System.out.println("file not found");
         }
+        System.out.println("Students loaded to the roster.");
         return true;
     }
 
