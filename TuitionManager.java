@@ -44,6 +44,12 @@ public class TuitionManager {
     }
 
     private boolean changeStudentMajor(String line[], Roster roster, Major majors[]){
+
+        if(line.length < 5) {
+            System.out.println("Invalid number of arguments");
+            return false;
+        }
+
         int majorIndex = Major.CS.getMajorIndex(line[4]);
         if(majorIndex==-1){
             System.out.println("Major code invalid: " + line[4]);
@@ -64,6 +70,12 @@ public class TuitionManager {
     }
 
     private boolean removeStudent(String line[]){
+
+        if(line.length < 4) {
+            System.out.println("Invalid number of arguments");
+            return false;
+        }
+
         Date date = new Date(line[3]);
         Profile profile = new Profile(line[2],line[1],date);
         NonResident pointer = new NonResident(profile, Major.CS, 0);
@@ -74,6 +86,15 @@ public class TuitionManager {
             System.out.println(profile.toString() + " is not in roster.");
             return false;
         }
+    }
+
+    private boolean listSchool(String line[]){
+        if(line.length < 2) {
+            System.out.println("Invalid number of arguments");
+            return false;
+        }
+        roster.printSchool(line[1]);
+        return true;
     }
 
     private Resident makeResident(Profile profile, Major major, int creditCompleted, int scholarship) {
@@ -97,6 +118,12 @@ public class TuitionManager {
     }
 
     private boolean addResident(String line[]){
+
+        if(line.length < 6) {
+            System.out.println("Invalid number of arguments");
+            return false;
+        }
+
         if(!isValidToAdd(line)) return false;
 
         Major pointer = Major.CS;
@@ -115,6 +142,12 @@ public class TuitionManager {
     }
 
     private boolean addNonResident(String line[]){
+
+        if(line.length < 6) {
+            System.out.println("Invalid number of arguments");
+            return false;
+        }
+
         if(!isValidToAdd(line)) return false;
 
         Major pointer = Major.CS;
@@ -133,6 +166,12 @@ public class TuitionManager {
     }
 
     private boolean addTriState(String line[]) {
+
+        if(line.length < 7) {
+            System.out.println("Invalid number of arguments");
+            return false;
+        }
+
         if(!isValidToAdd(line)) return false;
 
         Major pointer = Major.CS;
@@ -152,6 +191,12 @@ public class TuitionManager {
     }
 
     private boolean addInternational(String line[]){
+
+        if(line.length < 6) {
+            System.out.println("Invalid number of arguments");
+            return false;
+        }
+
         if(!isValidToAdd(line)) return false;
 
         boolean isStudyAbroad = false;
@@ -177,6 +222,12 @@ public class TuitionManager {
     }
 
     private boolean giveScholarship(String line[]){
+
+        if(line.length < 5) {
+            System.out.println("Invalid number of arguments");
+            return false;
+        }
+
         Date date = new Date(line[3]);
         Profile profile = new Profile(line[2],line[1],date);
         NonResident finder = new NonResident(profile, Major.CS, 20);
@@ -196,6 +247,19 @@ public class TuitionManager {
     }
 
     private boolean enroll(String line[]){
+
+        if(line.length < 5) {
+            System.out.println("Invalid number of arguments");
+            return false;
+        }
+
+        Profile ptr = new Profile(line[2],line[1], new Date(line[3]));
+        Resident test = new Resident(ptr,Major.CS,0,0);
+        if(!roster.contains(test)){
+            System.out.println(ptr.toString() + " not in roster");
+            return false;
+        }
+
         EnrollStudent enrollStudent = new EnrollStudent(new Profile(line[2], line[1], new Date(line[3])),Integer.parseInt(line[4]));
         if(enrollment.contains(enrollStudent)){
             EnrollStudent pointer = enrollment.getEnrollStudent(enrollStudent);
@@ -208,6 +272,12 @@ public class TuitionManager {
     }
 
     private boolean drop(String line[]){
+
+        if(line.length < 4) {
+            System.out.println("Invalid number of arguments");
+            return false;
+        }
+
         EnrollStudent enrollStudent = new EnrollStudent(new Profile(line[2], line[1], new Date(line[3])),Integer.parseInt(line[4]));
         enrollment.remove(enrollStudent);
         System.out.println(enrollStudent.toString() + " dropped from enrollment");
@@ -215,7 +285,11 @@ public class TuitionManager {
     }
 
     private boolean externalFile(String line[]) throws FileNotFoundException {
-        Scanner externalFile = new Scanner(new File(line[1]));
+        try {
+            Scanner externalFile = new Scanner(new File(line[1]));
+        } catch(FileNotFoundException ex) {
+            System.out.println("file not found");
+        }
         return true;
     }
 
@@ -244,7 +318,7 @@ public class TuitionManager {
             } else if (line[0].equals("P")) { /*display roster sorted by last name, first name, and DOB*/ roster.print();
             } else if (line[0].equals("PS")) { /*display roster sorted by standing*/roster.printByStanding();
             } else if (line[0].equals("PC")) { /*display roster sorted by school and major*/roster.printBySchoolMajor();
-            } else if (line[0].equals("L")) { /*list student in a specified school*/roster.printSchool(line[1]);
+            } else if (line[0].equals("L")) { /*list student in a specified school*/listSchool(line);
             } else if (line[0].equals("C")) { /*change a students major */ changeStudentMajor(line,roster,majors);
             } else if (line[0].equals("LS")) { /*load an external file*/ externalFile(line);
             } else if (line[0].equals("Q")) { /*terminate run*/System.out.println("Tuition Manager terminated."); break;
