@@ -58,6 +58,7 @@ public class Roster {
      * @return true if student is added, false if not
      */
     public boolean add(Student student){
+        if(contains(student)) return false;
         if(roster[size-1]!=null) grow();
         int i = 0;
         while(roster[i]!=null){
