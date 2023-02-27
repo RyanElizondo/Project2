@@ -43,7 +43,7 @@ public class Enrollment {
      */
     private int getIndex(EnrollStudent enrollStudent){
         int index = 0;
-        while(enrollStudents[index]!=null && index < size){
+        while(enrollStudents[index]!=null && index < size-1){
             if(enrollStudents[index].equals(enrollStudent)) return index;
             index++;
         }
@@ -111,7 +111,7 @@ public class Enrollment {
     public void printTuitionDue(Roster roster){
         int index = 0;
         if (enrollStudents[index] == null) {
-            System.out.println("Enrollment is empty!");
+            System.out.println("Student roster is empty!");
         } else {
             System.out.println("** Tuition Due **");
             while(enrollStudents[index]!=null && index < size){
@@ -121,7 +121,7 @@ public class Enrollment {
                 Student student = roster.getStudent(pointer);
                 //print out info
                 double tuitionDue = student.tuitionDue(enrollStudents[index].getCreditsEnrolled());
-                System.out.println(enrollStudents[index].toString() + " credits, tuition due: $" + String.format("%.2f",tuitionDue));
+                System.out.println(profile.toString() + " " + student.printType() + " enrolled " + enrollStudents[index].getCreditsEnrolled() +" credits, tuition due: $" + String.format("%.2f",tuitionDue));
                 index++;
             }
             System.out.println("* end of tuition due *");
