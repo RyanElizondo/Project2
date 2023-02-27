@@ -137,7 +137,7 @@ public class Roster {
         if(schoolExists(school)) {
             System.out.println("* Students in " + school + " *");
             if (roster[i] == null) {
-                System.out.println("rosterpackage.Student roster is empty!");
+                System.out.println("Student roster is empty!");
             }
             while (i != size && roster[i] != null) {
                 if (roster[i].getMajor().getSchool().equalsIgnoreCase(school)) System.out.println(roster[i].toString());
@@ -181,9 +181,9 @@ public class Roster {
         //print from 0 to size-1
         int i = 0;
         if(roster[i]==null){
-            System.out.println("rosterpackage.Student roster is empty!");
+            System.out.println("Student roster is empty!");
         } else {
-            System.out.println("* rosterpackage.Student roster sorted by last name, first name, DOB **");
+            System.out.println("* Student roster sorted by last name, first name, DOB **");
             while (i != size && roster[i] != null) {
                 System.out.println(roster[i].toString());
                 if (i < size) i++;
@@ -197,9 +197,9 @@ public class Roster {
     private void printSequential(){
         int i = 0;
         if(roster[i]==null){
-            System.out.println("rosterpackage.Student roster is empty!");
+            System.out.println("Student roster is empty!");
         } else {
-            System.out.println("* rosterpackage.Student roster sorted by school, major **");
+            System.out.println("* Student roster sorted by school, major **");
             while (i != size && roster[i] != null) {
                 System.out.println(roster[i].toString());
                 if (i < size) i++;
