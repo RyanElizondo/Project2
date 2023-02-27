@@ -24,7 +24,7 @@ public class Resident extends Student{
         this.scholarship = scholarship;
     }
 
-     /**
+    /**
      * tuitionDue calculates the tuition due for resident student using the given credits enrolled, scholarship, and tuition
      * @param creditsEnrolled
      * @return the tuition due for resident student
@@ -50,6 +50,18 @@ public class Resident extends Student{
     @Override
     public boolean isResident(){
         return true;
+    }
+
+    @Override
+    public String toString(){
+        return this.getProfile().toString() + " (" + this.getMajor().getMajorCode() + " " +
+                getMajor().getName() + " " + getMajor().getSchool() + ") credits completed: " +
+                getCreditCompleted() + " (" + getGrade() + ")(resident)";
+    }
+
+    @Override
+    public String printType(){
+        return "(Resident)";
     }
 
 }
