@@ -225,7 +225,7 @@ public class TuitionManager {
     EnrollStudent enrollStudent = new EnrollStudent();
     Major[] majors = Major.values();
 
-    void run() {
+    void run() throws FileNotFoundException {
         System.out.println("Tuition Manager is running...");
         while (true) {
             String command = sc.nextLine(); String[] line = command.split("\\s+");
