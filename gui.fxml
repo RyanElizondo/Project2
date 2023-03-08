@@ -43,12 +43,11 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.project3gui.HelloController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="602.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.project3gui.HelloController">
    <children>
       <TabPane prefHeight="355.0" prefWidth="602.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -63,21 +62,27 @@
                         <TextField layoutX="120.0" layoutY="28.0" />
                         <TextField layoutX="120.0" layoutY="73.0" />
                         <Text layoutX="43.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Major" />
-                        <RadioButton layoutX="120.0" layoutY="124.0" mnemonicParsing="false" text="BAIT" />
-                        <RadioButton layoutX="180.0" layoutY="124.0" mnemonicParsing="false" text="CS" />
-                        <RadioButton layoutX="233.0" layoutY="124.0" mnemonicParsing="false" text="ECE" />
-                        <RadioButton layoutX="289.0" layoutY="124.0" mnemonicParsing="false" text="ITI" />
-                        <RadioButton layoutX="341.0" layoutY="124.0" mnemonicParsing="false" text="MATH" />
+                        <RadioButton layoutX="120.0" layoutY="124.0" mnemonicParsing="false" text="BAIT">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="major" />
+                           </toggleGroup></RadioButton>
+                        <RadioButton layoutX="180.0" layoutY="124.0" mnemonicParsing="false" text="CS" toggleGroup="$major" />
+                        <RadioButton layoutX="233.0" layoutY="124.0" mnemonicParsing="false" text="ECE" toggleGroup="$major" />
+                        <RadioButton layoutX="289.0" layoutY="124.0" mnemonicParsing="false" text="ITI" toggleGroup="$major" />
+                        <RadioButton layoutX="341.0" layoutY="124.0" mnemonicParsing="false" text="MATH" toggleGroup="$major" />
                         <Text layoutX="307.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Credit Completed" />
                         <TextField layoutX="410.0" layoutY="74.0" prefHeight="26.0" prefWidth="69.0" />
                         <Text layoutX="46.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" />
                         <Text layoutX="41.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Status" />
-                        <RadioButton layoutX="120.0" layoutY="167.0" mnemonicParsing="false" text="Resident" />
-                        <RadioButton layoutX="120.0" layoutY="206.0" mnemonicParsing="false" text="Non-Resident" />
-                        <RadioButton layoutX="244.0" layoutY="167.0" mnemonicParsing="false" text="Tri-state" />
-                        <RadioButton layoutX="245.0" layoutY="206.0" mnemonicParsing="false" text="International" />
-                        <RadioButton layoutX="366.0" layoutY="166.0" mnemonicParsing="false" text="NY" />
-                        <RadioButton layoutX="445.0" layoutY="166.0" mnemonicParsing="false" text="CT" />
+                        <RadioButton layoutX="120.0" layoutY="167.0" mnemonicParsing="false" text="Resident">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="res_nonres" />
+                           </toggleGroup></RadioButton>
+                        <RadioButton layoutX="120.0" layoutY="206.0" mnemonicParsing="false" text="Non-Resident" toggleGroup="$res_nonres" />
+                        <RadioButton layoutX="244.0" layoutY="167.0" mnemonicParsing="false" text="Tri-state" toggleGroup="$res_nonres" />
+                        <RadioButton layoutX="245.0" layoutY="206.0" mnemonicParsing="false" text="International" toggleGroup="$res_nonres" />
+                        <RadioButton layoutX="366.0" layoutY="166.0" mnemonicParsing="false" text="NY" toggleGroup="$res_nonres" />
+                        <RadioButton layoutX="445.0" layoutY="166.0" mnemonicParsing="false" text="CT" toggleGroup="$res_nonres" />
                         <CheckBox layoutX="366.0" layoutY="206.0" mnemonicParsing="false" text="Study Abroad" />
                         <Button layoutX="125.0" layoutY="272.0" mnemonicParsing="false" text="Add" />
                         <Button layoutX="191.0" layoutY="272.0" mnemonicParsing="false" text="Drop" />
@@ -126,7 +131,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <MenuBar layoutX="179.0" layoutY="44.0" prefHeight="28.0" prefWidth="204.0">
+                        <MenuBar layoutX="199.0" layoutY="44.0" prefHeight="28.0" prefWidth="204.0">
                           <menus>
                             <Menu mnemonicParsing="false" text="Roster">
                               <items>
