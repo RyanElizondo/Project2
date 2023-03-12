@@ -1,3 +1,7 @@
+package com.example.project3gui;
+
+import javafx.scene.control.TextArea;
+
 public class Enrollment {
     private EnrollStudent[] enrollStudents;
     private int size;
@@ -94,26 +98,26 @@ public class Enrollment {
     /**
      * print the array as is without sorting
      */
-    public void print(){
+    public void print(TextArea messageArea){
         int index = 0;
         if (enrollStudents[index] == null) {
-            System.out.println("Enrollment is empty!");
+            messageArea.appendText("Enrollment is empty!\n");
         } else {
-            System.out.println("** Enrollment **");
+            messageArea.appendText("** Enrollment **\n");
             while(enrollStudents[index]!=null && index < size){
-                System.out.println(enrollStudents[index].toString());
+                messageArea.appendText(enrollStudents[index].toString() + "\n");
                 index++;
             }
-            System.out.println("* end of enrollment *");
+            messageArea.appendText("* end of enrollment *\n");
         }
     }
 
-    public void printTuitionDue(Roster roster){
+    public void printTuitionDue(Roster roster, TextArea messageArea){
         int index = 0;
         if (enrollStudents[index] == null) {
-            System.out.println("Student roster is empty!");
+            messageArea.appendText("Student roster is empty!\n");
         } else {
-            System.out.println("** Tuition Due **");
+            messageArea.appendText("** Tuition Due **\n");
             while(enrollStudents[index]!=null && index < size){
                 //create a pointer object to return the student type
                 Profile profile = enrollStudents[index].getProfile();
@@ -121,10 +125,10 @@ public class Enrollment {
                 Student student = roster.getStudent(pointer);
                 //print out info
                 double tuitionDue = student.tuitionDue(enrollStudents[index].getCreditsEnrolled());
-                System.out.println(profile.toString() + " " + student.printType() + " enrolled " + enrollStudents[index].getCreditsEnrolled() +" credits, tuition due: $" + String.format("%.2f",tuitionDue));
+                messageArea.appendText(profile.toString() + " " + student.printType() + " enrolled " + enrollStudents[index].getCreditsEnrolled() +" credits, tuition due: $" + String.format("%.2f",tuitionDue) + "\n");
                 index++;
             }
-            System.out.println("* end of tuition due *");
+            messageArea.appendText("* end of tuition due *\n");
         }
     }
 
