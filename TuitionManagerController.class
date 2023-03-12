@@ -243,22 +243,22 @@ public class TuitionManagerController {
             if(student instanceof International){
                 if(!student.isValid(enrolledCredits)){
                     if(((International) student).getIsStudyAbroad()){
-                        System.out.println("(International student study abroad) " + enrolledCredits + ": Invalid credit hours "); add=false;
+                        messageArea.appendText("(International student study abroad) " + enrolledCredits + ": Invalid credit hours\n"); add=false;
                     } else {
-                        System.out.println("(International student) " + enrolledCredits + ": Invalid credit hours "); add=false;
+                        messageArea.appendText("(International student) " + enrolledCredits + ": Invalid credit hours\n"); add=false;
                     }
                 }
             } else if (student instanceof Resident) {
                 if(!student.isValid(enrolledCredits)){
-                    System.out.println("(Resident) " + enrolledCredits + ": Invalid credit hours"); add=false;
+                    messageArea.appendText("(Resident) " + enrolledCredits + ": Invalid credit hours\n"); add=false;
                 }
             } else if (student instanceof TriState) {
                 if(!student.isValid(enrolledCredits)){
-                    System.out.println("(Tri-State) "+ enrolledCredits + ": Invalid credit hours"); add=false;
+                    messageArea.appendText("(Tri-State) "+ enrolledCredits + ": Invalid credit hours\n"); add=false;
                 }
             } else if(student instanceof NonResident){
                 if(!student.isValid(enrolledCredits)){
-                    System.out.println("(Non-Resident) " + enrolledCredits + ": Invalid credit hours"); add=false;
+                    messageArea.appendText("(Non-Resident) " + enrolledCredits + ": Invalid credit hours\n"); add=false;
                 }
             }
             if(enrollment.contains(enrollStudent) && add){
