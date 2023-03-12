@@ -100,7 +100,7 @@
             </Tab>
           <Tab text="Enroll/Drop">
                <content>
-                  <AnchorPane fx:id="enrollDrop_dob" prefHeight="200.0" prefWidth="200.0">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Text layoutX="43.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First Name" />
                         <Text layoutX="43.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Name" />
@@ -108,8 +108,8 @@
                         <Text layoutX="43.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Credits" />
                         <TextField fx:id="enrollDrop_fname" layoutX="123.0" layoutY="29.0" promptText="First Name" />
                         <TextField fx:id="enrollDrop_lname" layoutX="123.0" layoutY="74.0" promptText="First Name" />
-                        <TextField fx:id="enrollDrop_credits" layoutX="123.0" layoutY="167.0" prefHeight="26.0" prefWidth="62.0" promptText="0-120" />
-                        <DatePicker layoutX="123.0" layoutY="123.0" promptText="MM/DD/YYYY" />
+                        <TextField fx:id="enrollDrop_credits" layoutX="123.0" layoutY="167.0" prefHeight="26.0" prefWidth="62.0" promptText="X" />
+                        <DatePicker fx:id="enrollDrop_dob" layoutX="123.0" layoutY="123.0" promptText="MM/DD/YYYY" />
                         <Button layoutX="216.0" layoutY="248.0" mnemonicParsing="false" onAction="#enroll" text="Enroll" />
                         <Button layoutX="309.0" layoutY="248.0" mnemonicParsing="false" onAction="#enrollDrop_drop" text="Drop" />
                      </children>
