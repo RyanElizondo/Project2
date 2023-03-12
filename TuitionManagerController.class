@@ -18,7 +18,7 @@ public class TuitionManagerController {
     private TextField enrollDrop_credits;
 
     @FXML
-    private AnchorPane enrollDrop_dob;
+    private DatePicker enrollDrop_dob;
 
     @FXML
     private TextField enrollDrop_fname;
@@ -225,16 +225,75 @@ public class TuitionManagerController {
         roster_creditCompleted.setText("");
         roster_dob.setValue(null);
 
-
     }
 
     @FXML
     void enroll(ActionEvent event) {
-
+        boolean add = true;
+        String fname = enrollDrop_fname.getText(); String lname = enrollDrop_lname.getText();
+        String date = enrollDrop_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        Date dob = new Date(date); Profile profile = new Profile(lname,fname,dob);
+        int enrolledCredits = Integer.parseInt(enrollDrop_credits.getText());
+        Resident test = new Resident(profile,Major.CS,0,0);
+        if(!(roster.contains(test))){
+            messageArea.appendText(profile.toString() + " not in the roster\n");
+        } else {
+            EnrollStudent enrollStudent = new EnrollStudent(profile, enrolledCredits);
+            Student student = roster.getStudent(test);
+            if(student instanceof International){
+                if(!student.isValid(enrolledCredits)){
+                    if(((International) student).getIsStudyAbroad()){
+                        System.out.println("(International student study abroad) " + enrolledCredits + ": Invalid credit hours "); add=false;
+                    } else {
+                        System.out.println("(International student) " + enrolledCredits + ": Invalid credit hours "); add=false;
+                    }
+                }
+            } else if (student instanceof Resident) {
+                if(!student.isValid(enrolledCredits)){
+                    System.out.println("(Resident) " + enrolledCredits + ": Invalid credit hours"); add=false;
+                }
+            } else if (student instanceof TriState) {
+                if(!student.isValid(enrolledCredits)){
+                    System.out.println("(Tri-State) "+ enrolledCredits + ": Invalid credit hours"); add=false;
+                }
+            } else if(student instanceof NonResident){
+                if(!student.isValid(enrolledCredits)){
+                    System.out.println("(Non-Resident) " + enrolledCredits + ": Invalid credit hours"); add=false;
+                }
+            }
+            if(enrollment.contains(enrollStudent) && add){
+                EnrollStudent pointer = enrollment.getEnrollStudent(enrollStudent);
+                pointer.setCreditsEnrolled(enrolledCredits);
+                messageArea.appendText(enrollStudent.toString() + "\n");
+            } else if(add){
+                enrollment.add(enrollStudent);
+                messageArea.appendText(enrollStudent.toString() + "\n");
+            }
+        }
+        enrollDrop_credits.setText(""); enrollDrop_fname.setText(""); enrollDrop_lname.setText(""); enrollDrop_dob.setValue(null);
     }
 
     @FXML
     void enrollDrop_drop(ActionEvent event) {
+
+        String fname = enrollDrop_fname.getText();
+        String lname = enrollDrop_lname.getText();
+        String date = enrollDrop_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        Date dob = new Date(date);
+        Profile profile = new Profile(lname,fname,dob);
+        EnrollStudent pointer = new EnrollStudent(profile,0);
+
+        if(enrollment.contains(pointer)){
+            enrollment.remove(pointer);
+            messageArea.appendText(profile.toString() + " dropped from enrollment");
+        } else {
+            messageArea.appendText(profile.toString() + " not enrolled");
+        }
+
+        enrollDrop_credits.setText("");
+        enrollDrop_fname.setText("");
+        enrollDrop_lname.setText("");
+        enrollDrop_dob.setValue(null);
 
     }
 
@@ -277,52 +336,70 @@ public class TuitionManagerController {
     @FXML
     void printByProfile(ActionEvent event) {
 
+        roster.print(messageArea);
+
     }
 
     @FXML
     void printBySchoolMajor(ActionEvent event) {
+
+        roster.printBySchoolMajor(messageArea);
 
     }
 
     @FXML
     void printByStanding(ActionEvent event) {
 
+        roster.printByStanding(messageArea);
+
     }
 
     @FXML
     void printEnrolledStudents(ActionEvent event) {
+
+        enrollment.print(messageArea);
 
     }
 
     @FXML
     void printRBS(ActionEvent event) {
 
+        roster.printSchool("RBS",messageArea);
+
     }
 
     @FXML
     void printSAS(ActionEvent event) {
+
+        roster.printSchool("SAS",messageArea);
 
     }
 
     @FXML
     void printSCI(ActionEvent event) {
 
+        roster.printSchool("SC&I",messageArea);
+
     }
 
     @FXML
     void printSOE(ActionEvent event) {
+
+        roster.printSchool("SOE",messageArea);
 
     }
 
     @FXML
     void printSemesterEnd(ActionEvent event) {
 
-
+        roster.printCompleted(enrollment,messageArea);
 
     }
 
     @FXML
     void printTuitionDue(ActionEvent event) {
+
+        enrollment.printTuitionDue(roster,messageArea);
 
     }
 
@@ -363,8 +440,6 @@ public class TuitionManagerController {
         roster_creditCompleted.setText("");
         roster_dob.setValue(null);
 
-
-
     }
 
     @FXML
@@ -383,6 +458,26 @@ public class TuitionManagerController {
 
     @FXML
     void updateScholarship(ActionEvent event) {
+
+        String fname = scholarship_fname.getText();
+        String lname = scholarship_lname.getText();
+        String date = scholarship_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+        Date dob = new Date(date);
+        Profile profile = new Profile(lname,fname,dob);
+        Resident pointer = new Resident(profile,Major.CS,0,0);
+        int scholarship = Integer.parseInt(scholarship_amount.getText());
+
+        if(!(roster.contains(pointer))){
+            messageArea.appendText(profile.toString() + " not in the roster\n");
+        } else {
+            Student student = roster.getStudent(pointer);
+            if (!(student instanceof Resident)) {
+                messageArea.appendText(profile.toString() + " ineligible: not a resident\n");
+            } else {
+                ((Resident) student).setScholarship(scholarship);
+                messageArea.appendText(profile.toString() + " scholarship updated to $" + scholarship + "\n");
+            }
+        }
 
     }
 
