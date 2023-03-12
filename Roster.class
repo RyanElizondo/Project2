@@ -1,4 +1,10 @@
 
+package com.example.project3gui;
+
+
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+
 /**
  * Roster.java
  *
@@ -127,25 +133,25 @@ public class Roster {
         }
     }
 
-    /**
+    /*/*
      * printSchool method for printing all students in a school
      * @param school
-     */
-    public void printSchool(String school){ //prints students in a school
+     **/
+    public void printSchool(String school, TextArea messageArea){ //prints students in a school
         lexicoSort();
         int i = 0;
         if(schoolExists(school)) {
-            System.out.println("* Students in " + school + " *");
+            messageArea.appendText("* Students in " + school + " *\n");
             if (roster[i] == null) {
-                System.out.println("Student roster is empty!");
+                messageArea.appendText("Student roster is empty!\n");
             }
             while (i != size && roster[i] != null) {
-                if (roster[i].getMajor().getSchool().equalsIgnoreCase(school)) System.out.println(roster[i].toString());
+                if (roster[i].getMajor().getSchool().equalsIgnoreCase(school)) messageArea.appendText(roster[i].toString() + "\n");
                 if (i < size) i++;
             }
-            System.out.println("* end of list **");
+            messageArea.appendText("* end of list **\n");
         } else {
-            System.out.println("School doesn't exist: " + school);
+            messageArea.appendText("School doesn't exist: " + school + "\n");
         }
 
     }
@@ -166,7 +172,7 @@ public class Roster {
      * print method for printing the roster
      *
      */
-    public void print(){ //prints roster
+    public void print(TextArea messageArea){ //prints roster
         //sort lexicographically
         for(int i = 0; i < size; i++){
             for(int j = i + 1; j < size; j++){
@@ -181,52 +187,52 @@ public class Roster {
         //print from 0 to size-1
         int i = 0;
         if(roster[i]==null){
-            System.out.println("Student roster is empty!");
+            messageArea.appendText("Student roster is empty!\n");
         } else {
-            System.out.println("* Student roster sorted by last name, first name, DOB **");
+            messageArea.appendText("* Student roster sorted by last name, first name, DOB **\n");
             while (i != size && roster[i] != null) {
-                System.out.println(roster[i].toString());
+                messageArea.appendText(roster[i].toString() + "\n");
                 if (i < size) i++;
             }
-            System.out.println("* end of roster **");
+            messageArea.appendText("* end of roster **\n");
         }
     }
 
-    public void printForStanding(){ //prints roster
+    private void printForStanding(TextArea messageArea){ //prints roster
         //print from 0 to size-1
         int i = 0;
         if(roster[i]==null){
-            System.out.println("Student roster is empty!");
+            messageArea.appendText("Student roster is empty!\n");
         } else {
-            System.out.println("* Student roster sorted by standing **");
+            messageArea.appendText("* Student roster sorted by standing **\n");
             while (i != size && roster[i] != null) {
-                System.out.println(roster[i].toString());
+                messageArea.appendText(roster[i].toString() + "\n");
                 if (i < size) i++;
             }
-            System.out.println("* end of roster **");
+            messageArea.appendText("* end of roster **\n");
         }
     }
     /**
      * printSequential method for printing the roster sequentially
      */
-    private void printSequential(){
+    private void printSequential(TextArea messageArea){
         int i = 0;
         if(roster[i]==null){
-            System.out.println("Student roster is empty!");
+            messageArea.appendText("Student roster is empty!\n");
         } else {
-            System.out.println("* Student roster sorted by school, major **");
+            messageArea.appendText("* Student roster sorted by school, major **\n");
             while (i != size && roster[i] != null) {
-                System.out.println(roster[i].toString());
+                messageArea.appendText(roster[i].toString() + "\n");
                 if (i < size) i++;
             }
-            System.out.println("* end of roster **");
+            messageArea.appendText("* end of roster **\n");
         }
     }
 
     /**
      * printBySchoolMajor method for printing the roster by school and major
      */
-    public void printBySchoolMajor(){
+    public void printBySchoolMajor(TextArea messageArea){
         //sort by school
         for(int i = 0; i < size; i++){
             for(int j = i + 1; j < size; j++){
@@ -264,13 +270,13 @@ public class Roster {
             }
         }
         //print array sequentially
-        printSequential();
+        printSequential(messageArea);
     }
 
     /**
      * printByStanding method for printing the roster by credit standing
      */
-    public void printByStanding(){
+    public void printByStanding(TextArea messageArea){
         //sort by standing (credit completed)
         for(int i = 0; i < size; i++){
             for(int j = i + 1; j < size; j++){
@@ -294,19 +300,19 @@ public class Roster {
             }
         }
         //print sequentially
-        printForStanding();
+        printForStanding(messageArea);
     }
 
     /**
      * printCompleted method for printing the roster of students who have completed 120 credits or more
      */
-    public  void printCompleted(Enrollment enrollment){
+    public  void printCompleted(Enrollment enrollment, TextArea messageArea){
         int i = 0;
         if(roster[i]==null){
-            System.out.println("Student roster is empty!");
+            messageArea.appendText("Student roster is empty!\n");
         } else {
-            System.out.println("Credit completed has been updated");
-            System.out.println("** list of students eligible for graduation **");
+            messageArea.appendText("Credit completed has been updated\n");
+            messageArea.appendText("** list of students eligible for graduation **\n");
             while (i != size && roster[i] != null) {
                 Profile profile = roster[i].getProfile();
                 EnrollStudent enrollStudent = new EnrollStudent(profile,0);
@@ -316,7 +322,7 @@ public class Roster {
                     currentCredits += student.getCreditsEnrolled();
                     roster[i].setCreditCompleted(currentCredits);
                 }
-                if(roster[i].getCreditCompleted()>=120) System.out.println(roster[i].toString());
+                if(roster[i].getCreditCompleted()>=120) messageArea.appendText(roster[i].toString() + "\n");
                 if (i < size) i++;
             }
         }
