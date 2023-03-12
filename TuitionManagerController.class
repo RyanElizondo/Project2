@@ -2,12 +2,7 @@ package com.example.project3gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.time.format.DateTimeFormatter;
@@ -71,8 +66,8 @@ public class TuitionManagerController {
     @FXML
     private RadioButton rb_triState;
 
-//    @FXML
-//    private MenuItem semesterEnd;
+    @FXML
+    private MenuItem semesterEnd;
 
     @FXML
     private ToggleGroup res_nonres;
@@ -394,6 +389,8 @@ public class TuitionManagerController {
 
         roster.printCompleted(enrollment,messageArea);
 
+        semesterEnd.setDisable(true);
+
     }
 
     @FXML
@@ -478,6 +475,8 @@ public class TuitionManagerController {
                 messageArea.appendText(profile.toString() + " scholarship updated to $" + scholarship + "\n");
             }
         }
+        
+        scholarship_amount.setText(""); scholarship_dob.setValue(null); scholarship_fname.setText(""); scholarship_lname.setText("");
 
     }
 
