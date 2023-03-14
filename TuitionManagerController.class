@@ -103,90 +103,55 @@ public class TuitionManagerController {
     Enrollment enrollment = new Enrollment();
 
 
-    @FXML
-    void add(ActionEvent event) {
-
-        String fname = roster_fname.getText();
-        String lname = roster_lname.getText();
-        String date = roster_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-        Date dob = new Date(date);
+    private void addMethod(){
+        String fname = roster_fname.getText(); String lname = roster_lname.getText();
+        String date = roster_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")); Date dob = new Date(date);
         int creditCompleted = Integer.parseInt(roster_creditCompleted.getText());
         Profile profile = new Profile(lname,fname,dob);
         Major major;
-
         if(rb_bait.isSelected()){
-            major = Major.BAIT;
-        } else if (rb_cs.isSelected()) {
-            major = Major.CS;
-        } else if (rb_ece.isSelected()) {
-            major = Major.EE;
-        } else if (rb_iti.isSelected()) {
-            major = Major.ITI;
-        } else /* math */ {
-            major = Major.MATH;
-        }
-
+            major = Major.BAIT; } else if (rb_cs.isSelected()) {
+            major = Major.CS; } else if (rb_ece.isSelected()) {
+            major = Major.EE; } else if (rb_iti.isSelected()) {
+            major = Major.ITI; } else /* math */ {
+            major = Major.MATH; }
         if(rb_resident.isSelected()){
-
             int scholarship = 0;
             Resident resident = new Resident(profile,major,creditCompleted,scholarship);
             if(roster.add(resident)) {
-                messageArea.appendText(resident.toString() + " added to the roster\n");
-            } else {
-                messageArea.appendText(resident.toString() + " is already in the roster\n");
-            }
-
+                messageArea.appendText(resident.toString() + " added to the roster\n"); } else {
+                messageArea.appendText(resident.toString() + " is already in the roster\n"); }
         } else if (rb_nonResident.isSelected()) {
-
             NonResident nonResident = new NonResident(profile,major,creditCompleted);
             if(roster.add(nonResident)) {
-                messageArea.appendText(nonResident.toString() + " added to the roster\n");
-            } else {
-                messageArea.appendText(nonResident.toString() + " is already in the roster\n");
-            }
-
+                messageArea.appendText(nonResident.toString() + " added to the roster\n"); } else {
+                messageArea.appendText(nonResident.toString() + " is already in the roster\n"); }
         } else if (rb_triState.isSelected()) {
-
             String state;
             if(rb_ny.isSelected()){
-                state = "NY";
-            } else {
-                state = "CT";
-            }
+                state = "NY"; } else {
+                state = "CT"; }
             TriState triState = new TriState(profile, major,creditCompleted,state);
             if(roster.add(triState)) {
-                messageArea.appendText(triState.toString() + " added to the roster\n");
-            } else {
-                messageArea.appendText(triState.toString() + " is already in the roster\n");
-            }
-
+                messageArea.appendText(triState.toString() + " added to the roster\n"); } else {
+                messageArea.appendText(triState.toString() + " is already in the roster\n"); }
         } else /*international*/ {
-
             boolean studyAbroad;
-            if(isStudyAbroad.isSelected()){
-                studyAbroad = true;
-            } else {
-                studyAbroad = false;
-            }
+            studyAbroad = isStudyAbroad.isSelected();
             International international = new International(profile,major,creditCompleted,studyAbroad);
             if(roster.add(international)) {
-                messageArea.appendText(international.toString() + " added to the roster\n");
-            } else {
-                messageArea.appendText(international.toString() + " is already in the roster\n");
-            }
+                messageArea.appendText(international.toString() + " added to the roster\n"); } else {
+                messageArea.appendText(international.toString() + " is already in the roster\n"); } }
+        roster_fname.setText(""); roster_lname.setText(""); roster_creditCompleted.setText(""); roster_dob.setValue(null);
+    }
+    @FXML
+    void add(ActionEvent event) {
 
-        }
-
-        roster_fname.setText("");
-        roster_lname.setText("");
-        roster_creditCompleted.setText("");
-        roster_dob.setValue(null);
+        addMethod();
 
     }
 
-    @FXML
-    void changeMajor(ActionEvent event) {
-
+    private void changeMajorMethod(){
         String fname = roster_fname.getText();
         String lname = roster_lname.getText();
         String date = roster_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
@@ -215,17 +180,17 @@ public class TuitionManagerController {
             messageArea.appendText(profile.toString() + " not in the roster");
         }
 
-        roster_fname.setText("");
-        roster_lname.setText("");
-        roster_creditCompleted.setText("");
-        roster_dob.setValue(null);
+        roster_fname.setText(""); roster_lname.setText(""); roster_creditCompleted.setText(""); roster_dob.setValue(null);
+    }
+    @FXML
+    void changeMajor(ActionEvent event) {
+
+        changeMajorMethod();
 
     }
 
-    @FXML
-    void enroll(ActionEvent event) {
-        boolean add = true;
-        String fname = enrollDrop_fname.getText(); String lname = enrollDrop_lname.getText();
+    private void enrollMethod(){
+        boolean add = true; String fname = enrollDrop_fname.getText(); String lname = enrollDrop_lname.getText();
         String date = enrollDrop_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
         Date dob = new Date(date); Profile profile = new Profile(lname,fname,dob);
         int enrolledCredits = Integer.parseInt(enrollDrop_credits.getText());
@@ -240,37 +205,33 @@ public class TuitionManagerController {
                     if(((International) student).getIsStudyAbroad()){
                         messageArea.appendText("(International student study abroad) " + enrolledCredits + ": Invalid credit hours\n"); add=false;
                     } else {
-                        messageArea.appendText("(International student) " + enrolledCredits + ": Invalid credit hours\n"); add=false;
-                    }
-                }
+                        messageArea.appendText("(International student) " + enrolledCredits + ": Invalid credit hours\n"); add=false; }}
             } else if (student instanceof Resident) {
                 if(!student.isValid(enrolledCredits)){
-                    messageArea.appendText("(Resident) " + enrolledCredits + ": Invalid credit hours\n"); add=false;
-                }
+                    messageArea.appendText("(Resident) " + enrolledCredits + ": Invalid credit hours\n"); add=false; }
             } else if (student instanceof TriState) {
                 if(!student.isValid(enrolledCredits)){
-                    messageArea.appendText("(Tri-State) "+ enrolledCredits + ": Invalid credit hours\n"); add=false;
-                }
+                    messageArea.appendText("(Tri-State) "+ enrolledCredits + ": Invalid credit hours\n"); add=false; }
             } else if(student instanceof NonResident){
                 if(!student.isValid(enrolledCredits)){
-                    messageArea.appendText("(Non-Resident) " + enrolledCredits + ": Invalid credit hours\n"); add=false;
-                }
-            }
+                    messageArea.appendText("(Non-Resident) " + enrolledCredits + ": Invalid credit hours\n"); add=false; } }
             if(enrollment.contains(enrollStudent) && add){
                 EnrollStudent pointer = enrollment.getEnrollStudent(enrollStudent);
                 pointer.setCreditsEnrolled(enrolledCredits);
                 messageArea.appendText(enrollStudent.toString() + "\n");
             } else if(add){
                 enrollment.add(enrollStudent);
-                messageArea.appendText(enrollStudent.toString() + "\n");
-            }
-        }
-        enrollDrop_credits.setText(""); enrollDrop_fname.setText(""); enrollDrop_lname.setText(""); enrollDrop_dob.setValue(null);
+                messageArea.appendText(enrollStudent.toString() + "\n");}
+        } enrollDrop_credits.setText(""); enrollDrop_fname.setText(""); enrollDrop_lname.setText(""); enrollDrop_dob.setValue(null);
+    }
+    @FXML
+    void enroll(ActionEvent event) {
+
+        enrollMethod();
+
     }
 
-    @FXML
-    void enrollDrop_drop(ActionEvent event) {
-
+    private void enrollDrop_dropMethod(){
         String fname = enrollDrop_fname.getText();
         String lname = enrollDrop_lname.getText();
         String date = enrollDrop_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
@@ -285,10 +246,13 @@ public class TuitionManagerController {
             messageArea.appendText(profile.toString() + " not enrolled");
         }
 
-        enrollDrop_credits.setText("");
-        enrollDrop_fname.setText("");
-        enrollDrop_lname.setText("");
-        enrollDrop_dob.setValue(null);
+        enrollDrop_credits.setText(""); enrollDrop_fname.setText(""); enrollDrop_lname.setText(""); enrollDrop_dob.setValue(null);
+
+    }
+    @FXML
+    void enrollDrop_drop(ActionEvent event) {
+
+        enrollDrop_dropMethod();
 
     }
 
@@ -416,9 +380,7 @@ public class TuitionManagerController {
         isStudyAbroad.setSelected(false);
     }
 
-    @FXML
-    void roster_drop(ActionEvent event) {
-
+    private void roster_dropMethod(){
         String fname = roster_fname.getText();
         String lname = roster_lname.getText();
         String date = roster_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
@@ -436,6 +398,12 @@ public class TuitionManagerController {
         roster_lname.setText("");
         roster_creditCompleted.setText("");
         roster_dob.setValue(null);
+    }
+
+    @FXML
+    void roster_drop(ActionEvent event) {
+
+        roster_dropMethod();
 
     }
 
@@ -453,9 +421,7 @@ public class TuitionManagerController {
 
     }
 
-    @FXML
-    void updateScholarship(ActionEvent event) {
-
+    private void updateScholarshipMethod(){
         String fname = scholarship_fname.getText();
         String lname = scholarship_lname.getText();
         String date = scholarship_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
@@ -475,8 +441,13 @@ public class TuitionManagerController {
                 messageArea.appendText(profile.toString() + " scholarship updated to $" + scholarship + "\n");
             }
         }
-        
         scholarship_amount.setText(""); scholarship_dob.setValue(null); scholarship_fname.setText(""); scholarship_lname.setText("");
+    }
+
+    @FXML
+    void updateScholarship(ActionEvent event) {
+
+        updateScholarshipMethod();
 
     }
 
