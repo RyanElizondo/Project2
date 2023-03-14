@@ -102,6 +102,27 @@ public class TuitionManagerController {
     Roster roster = new Roster();
     Enrollment enrollment = new Enrollment();
 
+    private boolean isValidToAdd() {
+        Date date = new Date(roster_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        if (date.isValid()) {
+            if (date.isSixteen()) {
+                    if (isInt(roster_creditCompleted.getText())) {
+                        if (Integer.parseInt(roster_creditCompleted.getText()) >= 0) {
+                            return true;
+                        } else {
+                            messageArea.appendText("Credits completed invalid: cannot be negative!\n");
+                        }
+                    } else {
+                        messageArea.appendText("Credits completed invalid: not an integer!\n");
+                    }
+            } else {
+               messageArea.appendText("DOB invalid: " + date.toString() + " younger than 16 years old.\n");
+            }
+        } else {
+            messageArea.appendText("DOB invalid: " + date.toString() + " not a valid calendar date!\n");
+        }
+        return false;
+    }
 
     private void addMethod(){
         String fname = roster_fname.getText(); String lname = roster_lname.getText();
@@ -144,11 +165,30 @@ public class TuitionManagerController {
                 messageArea.appendText(international.toString() + " is already in the roster\n"); } }
         roster_fname.setText(""); roster_lname.setText(""); roster_creditCompleted.setText(""); roster_dob.setValue(null);
     }
+
+    private boolean isInt(String string) {
+        try {
+            Integer.parseInt(string);
+            return true;
+        } catch (NumberFormatException n) {
+            return false;
+        }
+    }
+
     @FXML
     void add(ActionEvent event) {
-
-        addMethod();
-
+        if(roster_fname.getText().trim().equals("") || roster_lname.getText().trim().equals("")
+        || roster_creditCompleted.getText().trim().equals("") || roster_dob.getValue()==null){
+            messageArea.appendText("Please fill out all text fields\n");
+        } else if (roster_fname.getText().contains(" ") || roster_lname.getText().contains(" ")) {
+            messageArea.appendText("First or last names cannot contains spaces\n");
+        } else if (!isInt(roster_creditCompleted.getText()) || Integer.parseInt(roster_creditCompleted.getText()) < 0) {
+            messageArea.appendText("Credit completed invalid\n");
+        } else if (roster_dob.getValue()==null){
+            messageArea.appendText("Date of birth cannot be empty\n");
+        } else {
+            if(isValidToAdd()) addMethod();
+        }
     }
 
     private void changeMajorMethod(){
@@ -184,9 +224,14 @@ public class TuitionManagerController {
     }
     @FXML
     void changeMajor(ActionEvent event) {
-
-        changeMajorMethod();
-
+        if(roster_fname.getText().trim().equals("") || roster_lname.getText().trim().equals("")
+                || roster_dob.getValue()==null){
+            messageArea.appendText("Please fill out all text fields\n");
+        } else if (roster_fname.getText().contains(" ") || roster_lname.getText().contains(" ")) {
+            messageArea.appendText("First or last names cannot contains spaces\n");
+        } else {
+            changeMajorMethod();
+        }
     }
 
     private void enrollMethod(){
@@ -226,9 +271,14 @@ public class TuitionManagerController {
     }
     @FXML
     void enroll(ActionEvent event) {
-
-        enrollMethod();
-
+        if(enrollDrop_fname.getText().trim().equals("") || enrollDrop_lname.getText().trim().equals("")
+            || enrollDrop_dob.getValue()==null || enrollDrop_credits.getText().trim().equals("")){
+            messageArea.appendText("Please fill out all text fields\n");
+        } else if(!isInt(enrollDrop_credits.getText())) {
+            messageArea.appendText("Credits must be an integer\n");
+        } else {
+            enrollMethod();
+        }
     }
 
     private void enrollDrop_dropMethod(){
@@ -252,7 +302,12 @@ public class TuitionManagerController {
     @FXML
     void enrollDrop_drop(ActionEvent event) {
 
-        enrollDrop_dropMethod();
+        if(enrollDrop_fname.getText().trim().equals("") || enrollDrop_lname.getText().trim().equals("")
+            || enrollDrop_dob.getValue()==null){
+            messageArea.appendText("Please fill out first name, last name, and date of birth\n");
+        } else {
+            enrollDrop_dropMethod();
+        }
 
     }
 
@@ -402,9 +457,14 @@ public class TuitionManagerController {
 
     @FXML
     void roster_drop(ActionEvent event) {
-
-        roster_dropMethod();
-
+        if(roster_fname.getText().trim().equals("") || roster_lname.getText().trim().equals("")
+                || roster_dob.getValue()==null){
+            messageArea.appendText("Please fill out all text fields\n");
+        } else if (roster_fname.getText().contains(" ") || roster_lname.getText().contains(" ")) {
+            messageArea.appendText("First or last names cannot contains spaces\n");
+        } else {
+            roster_dropMethod();
+        }
     }
 
     @FXML
@@ -421,34 +481,50 @@ public class TuitionManagerController {
 
     }
 
-    private void updateScholarshipMethod(){
+    private boolean updateScholarshipMethod(){
         String fname = scholarship_fname.getText();
         String lname = scholarship_lname.getText();
-        String date = scholarship_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-        Date dob = new Date(date);
-        Profile profile = new Profile(lname,fname,dob);
-        Resident pointer = new Resident(profile,Major.CS,0,0);
         int scholarship = Integer.parseInt(scholarship_amount.getText());
-
-        if(!(roster.contains(pointer))){
-            messageArea.appendText(profile.toString() + " not in the roster\n");
-        } else {
-            Student student = roster.getStudent(pointer);
-            if (!(student instanceof Resident)) {
-                messageArea.appendText(profile.toString() + " ineligible: not a resident\n");
-            } else {
-                ((Resident) student).setScholarship(scholarship);
-                messageArea.appendText(profile.toString() + " scholarship updated to $" + scholarship + "\n");
-            }
+        if(scholarship > 10000 || scholarship < 1){
+            messageArea.appendText(scholarship + ": invalid amount\n"); return false;
         }
+        Date date = new Date(scholarship_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        Profile profile = new Profile(lname,fname,date);
+        NonResident finder = new NonResident(profile, Major.CS, 20);
+        if(!roster.contains(finder)){
+            messageArea.appendText(profile.toString() + " is not in the roster.\n");
+            return false;
+        }
+        Student student = roster.getStudent(finder);
+        EnrollStudent ptr = new EnrollStudent(profile,0);
+        EnrollStudent enrollStudent;
+        if(enrollment.contains(ptr)) {
+            enrollStudent = enrollment.getEnrollStudent(ptr);
+        } else {
+            messageArea.appendText(profile.toString() + " not enrolled\n");
+            return false;
+        }
+        if((!(student instanceof Resident)) || enrollStudent.getCreditsEnrolled() < 12){
+            messageArea.appendText(profile.toString() + " " + student.printType() + " is not eligible for the scholarship.\n");
+            return false;
+        }
+        ((Resident) student).setScholarship(scholarship);
+        messageArea.appendText(profile.toString() + ": scholarship amount updated.\n");
         scholarship_amount.setText(""); scholarship_dob.setValue(null); scholarship_fname.setText(""); scholarship_lname.setText("");
+        return true;
     }
 
     @FXML
     void updateScholarship(ActionEvent event) {
 
-        updateScholarshipMethod();
+        if(scholarship_fname.getText().trim().equals("") || scholarship_lname.getText().trim().equals("")
+             || scholarship_dob.getValue()==null || scholarship_amount.getText().trim().equals("")) {
+            messageArea.appendText("Please fill out all text fields\n");
+        } else if(!isInt(scholarship_amount.getText())) {
+            messageArea.appendText("Scholarship amount must be an integer\n");
+        } else {
+            updateScholarshipMethod();
+        }
 
     }
-
 }
