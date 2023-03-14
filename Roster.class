@@ -133,6 +133,17 @@ public class Roster {
         }
     }
 
+    private int countStudentsInSchool(String school){
+        int count = 0;
+        int i = 0;
+        while (i != size && roster[i] != null) {
+            if (roster[i].getMajor().getSchool().equalsIgnoreCase(school))
+                count++;
+            if (i < size) i++;
+        }
+        return count;
+    }
+
     /*/*
      * printSchool method for printing all students in a school
      * @param school
@@ -140,18 +151,24 @@ public class Roster {
     public void printSchool(String school, TextArea messageArea){ //prints students in a school
         lexicoSort();
         int i = 0;
-        if(schoolExists(school)) {
-            messageArea.appendText("* Students in " + school + " *\n");
-            if (roster[i] == null) {
-                messageArea.appendText("Student roster is empty!\n");
+        if(roster[0]!=null) {
+            if (schoolExists(school)) {
+                if(countStudentsInSchool(school)!=0){
+                messageArea.appendText("* Students in " + school + " *\n");
+                while (i != size && roster[i] != null) {
+                    if (roster[i].getMajor().getSchool().equalsIgnoreCase(school))
+                        messageArea.appendText(roster[i].toString() + "\n");
+                    if (i < size) i++;
+                }
+                messageArea.appendText("* end of list **\n");
+            } else {
+                messageArea.appendText(school + " is empty!\n");
             }
-            while (i != size && roster[i] != null) {
-                if (roster[i].getMajor().getSchool().equalsIgnoreCase(school)) messageArea.appendText(roster[i].toString() + "\n");
-                if (i < size) i++;
-            }
-            messageArea.appendText("* end of list **\n");
         } else {
-            messageArea.appendText("School doesn't exist: " + school + "\n");
+                messageArea.appendText(school + " does not exist!\n");
+            }
+        } else {
+            messageArea.appendText("Student roster is empty!\n");
         }
 
     }
