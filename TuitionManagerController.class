@@ -291,9 +291,9 @@ public class TuitionManagerController {
 
         if(enrollment.contains(pointer)){
             enrollment.remove(pointer);
-            messageArea.appendText(profile.toString() + " dropped from enrollment");
+            messageArea.appendText(profile.toString() + " dropped from enrollment\n");
         } else {
-            messageArea.appendText(profile.toString() + " not enrolled");
+            messageArea.appendText(profile.toString() + " not enrolled\n");
         }
 
         enrollDrop_credits.setText(""); enrollDrop_fname.setText(""); enrollDrop_lname.setText(""); enrollDrop_dob.setValue(null);
@@ -442,7 +442,8 @@ public class TuitionManagerController {
         Date dob = new Date(date);
         Profile profile = new Profile(lname,fname,dob);
         Resident pointer = new Resident(profile, Major.CS, 0,0);
-
+        EnrollStudent enrollStudentPointer = new EnrollStudent(profile,0);
+        if(enrollment.contains(enrollStudentPointer)) enrollment.remove(enrollStudentPointer);
         if(roster.remove(pointer)) {
             messageArea.appendText(profile.toString() + " removed from the roster\n");
         } else {
