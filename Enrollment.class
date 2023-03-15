@@ -115,7 +115,7 @@ public class Enrollment {
     public void printTuitionDue(Roster roster, TextArea messageArea){
         int index = 0;
         if (enrollStudents[index] == null) {
-            messageArea.appendText("Student roster is empty!\n");
+            messageArea.appendText("Enrollment is empty!\n");
         } else {
             messageArea.appendText("** Tuition Due **\n");
             while(enrollStudents[index]!=null && index < size){
