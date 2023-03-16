@@ -4,8 +4,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class TuitionManagerController {
 
@@ -124,12 +128,37 @@ public class TuitionManagerController {
         return false;
     }
 
+    private boolean isValidToAdd(String[] line) {
+        Date date = new Date(line[3]);
+        if (date.isValid()) {
+            if (date.isSixteen()) {
+                if (Major.CS.getMajorIndex(line[4]) != -1) {
+                    if (isInt(line[5])) {
+                        if (Integer.parseInt(line[5]) >= 0) {
+                            return true;
+                        } else {
+                            messageArea.appendText("Credits completed invalid: cannot be negative!\n");
+                        }
+                    } else {
+                        messageArea.appendText("Credits completed invalid: not an integer!\n");
+                    }
+                } else {
+                    messageArea.appendText("Major code invalid: " + line[4] + "\n");
+                }
+            } else {
+                messageArea.appendText("DOB invalid: " + date.toString() + " younger than 16 years old.\n");
+            }
+        } else {
+            messageArea.appendText("DOB invalid: " + date.toString() + " not a valid calendar date!\n");
+        }
+        return false;
+    }
+
     private void addMethod(){
         String fname = roster_fname.getText(); String lname = roster_lname.getText();
         String date = roster_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")); Date dob = new Date(date);
         int creditCompleted = Integer.parseInt(roster_creditCompleted.getText());
-        Profile profile = new Profile(lname,fname,dob);
-        Major major;
+        Profile profile = new Profile(lname,fname,dob); Major major;
         if(rb_bait.isSelected()){
             major = Major.BAIT; } else if (rb_cs.isSelected()) {
             major = Major.CS; } else if (rb_ece.isSelected()) {
@@ -137,8 +166,7 @@ public class TuitionManagerController {
             major = Major.ITI; } else /* math */ {
             major = Major.MATH; }
         if(rb_resident.isSelected()){
-            int scholarship = 0;
-            Resident resident = new Resident(profile,major,creditCompleted,scholarship);
+            int scholarship = 0; Resident resident = new Resident(profile,major,creditCompleted,scholarship);
             if(roster.add(resident)) {
                 messageArea.appendText(resident.toString() + " added to the roster\n"); } else {
                 messageArea.appendText(resident.toString() + " is already in the roster\n"); }
@@ -157,8 +185,7 @@ public class TuitionManagerController {
                 messageArea.appendText(triState.toString() + " added to the roster\n"); } else {
                 messageArea.appendText(triState.toString() + " is already in the roster\n"); }
         } else /*international*/ {
-            boolean studyAbroad;
-            studyAbroad = isStudyAbroad.isSelected();
+            boolean studyAbroad; studyAbroad = isStudyAbroad.isSelected();
             International international = new International(profile,major,creditCompleted,studyAbroad);
             if(roster.add(international)) {
                 messageArea.appendText(international.toString() + " added to the roster\n"); } else {
@@ -219,7 +246,6 @@ public class TuitionManagerController {
         } else {
             messageArea.appendText(profile.toString() + " not in the roster");
         }
-
         roster_fname.setText(""); roster_lname.setText(""); roster_creditCompleted.setText(""); roster_dob.setValue(null);
     }
     @FXML
@@ -311,10 +337,139 @@ public class TuitionManagerController {
 
     }
 
-    @FXML
-    void externalFile(ActionEvent event) {
+    private boolean addResidentNoPrint(String line[]){
 
+        if(line.length < 6) {
+            System.out.println("Missing data in line command.");
+            return false;
+        }
+
+        if(!isValidToAdd(line)) return false;
+        Major[] majors = Major.values();
+        Major pointer = Major.CS;
+        int creditComp = Integer.parseInt(line[5]);
+        Date date = new Date(line[3]);
+        Profile profile = new Profile(line[2],line[1],date);
+        Resident resident = new Resident(profile,majors[pointer.getMajorIndex(line[4])],creditComp,0);
+        if(!roster.contains(resident)){
+            roster.add(resident);
+            return true;
+        } else {
+            return false;
+        }
     }
+
+    private boolean addNonResidentNoPrint(String line[]){
+
+        if(line.length < 6) {
+            System.out.println("Missing data in line command.");
+            return false;
+        }
+
+        if(!isValidToAdd(line)) return false;
+
+        Major pointer = Major.CS;
+        Major[] majors = Major.values();
+        int creditComp = Integer.parseInt(line[5]);
+        Date date = new Date(line[3]);
+        Profile profile = new Profile(line[2],line[1],date);
+        NonResident nonResident = new NonResident(profile,majors[pointer.getMajorIndex(line[4])],creditComp);
+        if(!roster.contains(nonResident)){
+            roster.add(nonResident);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean addTriStateNoPrint(String line[]) {
+
+        if(line.length < 7) {
+            System.out.println("Missing data in line command.");
+            return false;
+        }
+        if(!isValidToAdd(line)) return false;
+        if(!(line[6].equalsIgnoreCase("NY") || line[6].equalsIgnoreCase("CT"))) {
+            System.out.println(line[6] + ": Invalid state code.");
+            return false;
+        }
+        Major[] majors = Major.values();
+        Major pointer = Major.CS;
+        int creditComp = Integer.parseInt(line[5]);
+        String state = line[6];
+        Date date = new Date(line[3]);
+        Profile profile = new Profile(line[2],line[1],date);
+        TriState triState = new TriState(profile,majors[pointer.getMajorIndex(line[4])],creditComp,state);
+        if(!roster.contains(triState)) {
+            roster.add(triState);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean addInternationalNoPrint(String line[]){
+
+        if(line.length < 6) {
+            System.out.println("Missing data in line command.");
+            return false;
+        }
+        if(!isValidToAdd(line)) return false;
+        boolean isStudyAbroad = false;
+        if(line.length == 6){
+            isStudyAbroad = false;
+        } else {
+            if(line[6].equalsIgnoreCase("false")) isStudyAbroad = false;
+            if(line[6].equalsIgnoreCase("true")) isStudyAbroad = true;
+        }
+        Major[] majors = Major.values();
+        Major pointer = Major.CS;
+        int creditComp = Integer.parseInt(line[5]);
+        Date date = new Date(line[3]);
+        Profile profile = new Profile(line[2],line[1],date);
+        International international = new International(profile,majors[pointer.getMajorIndex(line[4])],creditComp,isStudyAbroad);
+        if(!roster.contains(international)){
+            roster.add(international);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @FXML
+    boolean externalFile(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(txtFilter);
+        fileChooser.setTitle("Open File");
+        File file = fileChooser.showOpenDialog(null); // you could pass a stage reference here if you wanted.
+        if (file != null) {
+            try {
+                Scanner scanner = new Scanner(file);
+                String command;
+                String lines[];
+                while(scanner.hasNextLine()) {
+                    command = scanner.nextLine();
+                    lines = command.split(",");
+                    if (lines[0].equals("R")) {
+                        addResidentNoPrint(lines);
+                    } else if (lines[0].equals("N")) {
+                        addNonResidentNoPrint(lines);
+                    } else if (lines[0].equals("T")) {
+                        addTriStateNoPrint(lines);
+                    } else if (lines[0].equals("I")) {
+                        addInternationalNoPrint(lines);
+                    }
+                }
+            } catch (FileNotFoundException ex) {
+                messageArea.appendText("File not found\n");
+                return false;
+            }
+        }
+        messageArea.appendText("Students loaded to the roster.\n"); return true;
+    }
+
+
 
     @FXML
     void internationalButtonPress(ActionEvent event) {
@@ -483,32 +638,25 @@ public class TuitionManagerController {
     }
 
     private boolean updateScholarshipMethod(){
-        String fname = scholarship_fname.getText();
-        String lname = scholarship_lname.getText();
+        String fname = scholarship_fname.getText(); String lname = scholarship_lname.getText();
         int scholarship = Integer.parseInt(scholarship_amount.getText());
-        if(scholarship > 10000 || scholarship < 1){
-            messageArea.appendText(scholarship + ": invalid amount\n"); return false;
-        }
+        if(scholarship > 10000 || scholarship < 1){ 
+            messageArea.appendText(scholarship + ": invalid amount\n"); return false; }
         Date date = new Date(scholarship_dob.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
         Profile profile = new Profile(lname,fname,date);
         NonResident finder = new NonResident(profile, Major.CS, 20);
         if(!roster.contains(finder)){
-            messageArea.appendText(profile.toString() + " is not in the roster.\n");
-            return false;
-        }
+            messageArea.appendText(profile.toString() + " is not in the roster.\n"); return false; }
         Student student = roster.getStudent(finder);
         EnrollStudent ptr = new EnrollStudent(profile,0);
         EnrollStudent enrollStudent;
         if(enrollment.contains(ptr)) {
-            enrollStudent = enrollment.getEnrollStudent(ptr);
-        } else {
+            enrollStudent = enrollment.getEnrollStudent(ptr); } else {
             messageArea.appendText(profile.toString() + " not enrolled\n");
-            return false;
-        }
+            return false; }
         if((!(student instanceof Resident)) || enrollStudent.getCreditsEnrolled() < 12){
             messageArea.appendText(profile.toString() + " " + student.printType() + " is not eligible for the scholarship.\n");
-            return false;
-        }
+            return false; }
         ((Resident) student).setScholarship(scholarship);
         messageArea.appendText(profile.toString() + ": scholarship amount updated.\n");
         scholarship_amount.setText(""); scholarship_dob.setValue(null); scholarship_fname.setText(""); scholarship_lname.setText("");
@@ -517,7 +665,6 @@ public class TuitionManagerController {
 
     @FXML
     void updateScholarship(ActionEvent event) {
-
         if(scholarship_fname.getText().trim().equals("") || scholarship_lname.getText().trim().equals("")
              || scholarship_dob.getValue()==null || scholarship_amount.getText().trim().equals("")) {
             messageArea.appendText("Please fill out all text fields\n");
@@ -526,6 +673,5 @@ public class TuitionManagerController {
         } else {
             updateScholarshipMethod();
         }
-
     }
 }
