@@ -90,10 +90,10 @@
                            </toggleGroup></RadioButton>
                         <RadioButton fx:id="rb_ct" disable="true" layoutX="445.0" layoutY="166.0" mnemonicParsing="false" text="CT" toggleGroup="$state" />
                         <CheckBox fx:id="isStudyAbroad" disable="true" layoutX="366.0" layoutY="206.0" mnemonicParsing="false" text="Study Abroad" />
-                        <Button layoutX="125.0" layoutY="272.0" mnemonicParsing="false" onAction="#add" text="Add" />
-                        <Button layoutX="191.0" layoutY="272.0" mnemonicParsing="false" onAction="#roster_drop" text="Drop" />
-                        <Button layoutX="260.0" layoutY="272.0" mnemonicParsing="false" onAction="#changeMajor" text="Change Major" />
-                        <Button layoutX="375.0" layoutY="272.0" mnemonicParsing="false" onAction="#externalFile" text="Load From File" />
+                        <Button layoutX="105.0" layoutY="272.0" mnemonicParsing="false" onAction="#add" text="Add" />
+                        <Button layoutX="178.0" layoutY="272.0" mnemonicParsing="false" onAction="#roster_drop" text="Drop" />
+                        <Button layoutX="267.0" layoutY="272.0" mnemonicParsing="false" onAction="#changeMajor" text="Change Major" />
+                        <Button layoutX="397.0" layoutY="272.0" mnemonicParsing="false" onAction="#externalFile" text="Load From File" />
                      </children>
                   </AnchorPane>
                </content>
@@ -169,6 +169,6 @@
             </Tab>
         </tabs>
       </TabPane>
-      <TextArea fx:id="messageArea" layoutY="355.0" prefHeight="278.0" prefWidth="602.0" />
+      <TextArea fx:id="messageArea" editable="false" layoutY="355.0" prefHeight="278.0" prefWidth="602.0" />
    </children>
 </AnchorPane>
